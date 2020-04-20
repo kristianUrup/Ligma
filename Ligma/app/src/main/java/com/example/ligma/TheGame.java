@@ -1,14 +1,14 @@
 package com.example.ligma;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 
-public class Rules extends Activity {
+public class TheGame extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rules);
-
+        setContentView(R.layout.activity_the_game);
     }
 }
