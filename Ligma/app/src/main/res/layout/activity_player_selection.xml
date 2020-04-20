@@ -30,22 +30,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/txtviewPlayers"
-        android:layout_width="131dp"
-        android:layout_height="251dp"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="265dp"
-        tools:layout_editor_absoluteY="139dp" />
-
     <EditText
         android:id="@+id/txtNewPlayer"
-        android:layout_width="wrap_content"
+        android:layout_width="213dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="69dp"
+        android:layout_marginEnd="182dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
-        tools:layout_editor_absoluteX="23dp"
-        tools:layout_editor_absoluteY="150dp" />
+        android:text="@string/newPlayerName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/LviewPlayers" />
+
+    <ListView
+        android:id="@+id/LviewPlayers"
+        android:layout_width="409dp"
+        android:layout_height="251dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnAddNewPlayer"
+        android:layout_width="88dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="41dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="53dp"
+        android:text="@string/addPlayer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txtNewPlayer"
+        app:layout_constraintTop_toBottomOf="@id/LviewPlayers" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
