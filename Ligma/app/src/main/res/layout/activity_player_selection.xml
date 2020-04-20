@@ -29,4 +29,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtviewPlayers"
+        android:layout_width="131dp"
+        android:layout_height="251dp"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="265dp"
+        tools:layout_editor_absoluteY="139dp" />
+
+    <EditText
+        android:id="@+id/txtNewPlayer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name"
+        tools:layout_editor_absoluteX="23dp"
+        tools:layout_editor_absoluteY="150dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
