@@ -1,8 +1,10 @@
-package com.example.ligma;
+package com.example.ligma.GUI;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.ligma.R;
 
 public class TheGame extends AppCompatActivity {
 

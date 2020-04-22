@@ -1,9 +1,11 @@
-package com.example.ligma;
+package com.example.ligma.GUI;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import com.example.ligma.R;
 
 public class PlayerSelection extends Activity {
 
