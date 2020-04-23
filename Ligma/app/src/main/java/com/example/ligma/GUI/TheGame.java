@@ -80,11 +80,13 @@ public class TheGame extends AppCompatActivity {
         Card card2 = new Card(2, CardType.DRINK, "bla bla bla boog boog");
         Card card3 = new Card(3, CardType.DRINK, "poopeee stinkyyyyy");
         Card card4 = new Card(4, CardType.DRINK, "argh argh argh argh 3 drink yes");
+        Card card5 = new Card(5, CardType.CHALLENGE, "DUEL", "jifjsdogjiogj sdogjsdfoig jdfsiogjiogjdfiog jdfogdjsfiog jsdfiog gdjsdjgiosdfjiojg iodfgjdiofsgjdios jsdg dsjgdiosfgj sd ");
 
         deck.add(card1);
         deck.add(card2);
         deck.add(card3);
         deck.add(card4);
+        deck.add(card5);
     }
 
     private void startGame() {
