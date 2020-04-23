@@ -13,9 +13,11 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ligma.BE.Card;
 import com.example.ligma.BE.CardType;
+import com.example.ligma.LOGIC.OnSwipeTouchListener;
 import com.example.ligma.R;
 
 public class TheGame extends AppCompatActivity {
@@ -29,6 +31,9 @@ public class TheGame extends AppCompatActivity {
     LinearLayout inventory;
     FrameLayout cardLayout;
 
+    private int currentPlayerIndex = 0;
+    private int currentDeckIndex = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +42,6 @@ public class TheGame extends AppCompatActivity {
         Intent intent = getIntent();
         playerList = intent.getStringArrayListExtra("player_list");
         deck = new ArrayList<>();
-        initDeck();
         Log.d("CREATION", "player list: " + playerList.toString());
         cardDesc = findViewById(R.id.card_description);
         cardExp = findViewById(R.id.cardExp);
@@ -46,18 +50,29 @@ public class TheGame extends AppCompatActivity {
         inventory = findViewById(R.id.inventory_layout);
         cardLayout = findViewById(R.id.cardLayout);
 
+        cardLayout.setOnTouchListener(new OnSwipeTouchListener(this) {
+            @Override
+            public void onSwipeLeft() {
+                super.onSwipeLeft();
+                Toast.makeText(TheGame.this, "Swipe to the left", Toast.LENGTH_SHORT).show();
+                nextTurn();
+            }
+            @Override
+            public void onSwipeRight() {
+                super.onSwipeRight();
+                Toast.makeText(TheGame.this, "Swipe to the right", Toast.LENGTH_SHORT).show();
+                nextTurn();
+            }
+        });
+
         LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        cardLayout.setOnTouchListener(new OnSwipeTouchListener());
-
-
-        cardDesc.setText("hello officer, drink 2 shots, but Frederik 400 shots");
-        playerName.setText("Mathias");
         TextView tvToInsert = new TextView(this);
         tvToInsert.setLayoutParams(lparams);
-        tvToInsert.setText("TOILET MANNER");
         this.inventory.addView(tvToInsert);
+
+        startGame();
     }
 
     private void initDeck() {
@@ -70,5 +85,40 @@ public class TheGame extends AppCompatActivity {
         deck.add(card2);
         deck.add(card3);
         deck.add(card4);
+    }
+
+    private void startGame() {
+        initDeck();
+        setCurrentRoundInfo();
+    }
+
+    private void nextTurn() {
+        if (currentPlayerIndex == playerList.size() - 1) {
+            currentPlayerIndex = 0;
+        }else {
+            currentPlayerIndex++;
+        }
+
+        if (currentDeckIndex == deck.size() - 1) {
+            currentDeckIndex = 0;
+        }else {
+            currentDeckIndex++;
+        }
+
+        setCurrentRoundInfo();
+
+    }
+
+    private void setCurrentRoundInfo() {
+        playerName.setText(playerList.get(currentPlayerIndex));
+        Card startingCard = deck.get(currentDeckIndex);
+
+        cardType.setText(startingCard.getCardType().name());
+        cardDesc.setText(startingCard.getText());
+        cardExp.setText("");
+
+        if (startingCard.getCardType() != CardType.DRINK) {
+            cardExp.setText(startingCard.getEffectExplanation());
+        }
     }
 }
