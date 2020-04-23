@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import com.example.ligma.BE.Player;
 import com.example.ligma.R;
 
 public class PlayerSelection extends Activity {
@@ -52,10 +53,6 @@ public class PlayerSelection extends Activity {
                 checkAndAddPlayer();
             }
         });
-    }
-
-    public void onClickAddPlayer(View view){
-
     }
 
     private void checkAndAddPlayer(){
