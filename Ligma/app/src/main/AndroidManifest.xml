@@ -9,10 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TheGame"></activity>
-        <activity android:name=".Rules" />
-        <activity android:name=".PlayerSelection" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".GUI.TheGame"></activity>
+        <activity android:name=".GUI.Rules" />
+        <activity android:name=".GUI.PlayerSelection" />
+        <activity android:name=".GUI.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
