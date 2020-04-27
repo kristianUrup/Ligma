@@ -50,7 +50,6 @@
 
     <LinearLayout
         android:id="@+id/inventory_layout"
-        android:layout_width="291dp"
         android:layout_height="130dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="18dp"
@@ -58,6 +57,7 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/player_name"></LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/player_name"
+        android:layout_width="300dp"></LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -36,8 +36,8 @@ public class PlayerSelection extends Activity {
         editText = findViewById(R.id.txtNewPlayer);
         errorText = findViewById(R.id.txtViewErrorText);
 
-        list = new ArrayList<String>();
-        arrayAdapter = new ArrayAdapter<String>(getApplicationContext(),
+        list = new ArrayList<>();
+        arrayAdapter = new ArrayAdapter<>(getApplicationContext(),
                 android.R.layout.simple_list_item_1, list);
 
 
