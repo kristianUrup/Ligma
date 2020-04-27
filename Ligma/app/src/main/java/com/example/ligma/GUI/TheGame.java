@@ -141,7 +141,7 @@ public class TheGame extends AppCompatActivity {
         for (Card card : deckToShuffle) {
             deck.add(card);
         }
-        
+
         deckToShuffle.clear();
     }
 
