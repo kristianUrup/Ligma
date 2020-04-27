@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import android.view.MotionEvent;
 import android.view.View;
@@ -81,7 +82,6 @@ public class TheGame extends AppCompatActivity {
         Card card3 = new Card(3, CardType.DRINK, "poopeee stinkyyyyy");
         Card card4 = new Card(4, CardType.DRINK, "argh argh argh argh 3 drink yes");
         Card card5 = new Card(5, CardType.CHALLENGE, "DUEL", "jifjsdogjiogj sdogjsdfoig jdfsiogjiogjdfiog jdfogdjsfiog jsdfiog gdjsdjgiosdfjiojg iodfgjdiofsgjdios jsdg dsjgdiosfgj sd ");
-
         deck.add(card1);
         deck.add(card2);
         deck.add(card3);
@@ -91,6 +91,7 @@ public class TheGame extends AppCompatActivity {
 
     private void startGame() {
         initDeck();
+        shuffleDeck();
         setCurrentRoundInfo();
     }
 
@@ -123,4 +124,17 @@ public class TheGame extends AppCompatActivity {
             cardExp.setText(startingCard.getEffectExplanation());
         }
     }
+
+    private void shuffleDeck() {
+        Random random = new Random();
+
+        for (int i = deck.size() - 1; i > 0; i--) {
+            int randomPos = random.nextInt(i);
+
+            Card temp = deck.get(i);
+            deck.set(i, deck.get(randomPos));
+            deck.set(randomPos, temp);
+        }
+    }
+
 }
