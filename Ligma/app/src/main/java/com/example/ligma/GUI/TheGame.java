@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
 
 import android.view.MotionEvent;
@@ -24,7 +26,8 @@ import com.example.ligma.R;
 public class TheGame extends AppCompatActivity {
 
     ArrayList<String> playerList;
-    ArrayList<Card> deck;
+    ArrayList<Card> deckToShuffle;
+    Queue<Card> deck;
     TextView cardDesc;
     TextView playerName;
     TextView cardExp;
@@ -33,7 +36,6 @@ public class TheGame extends AppCompatActivity {
     FrameLayout cardLayout;
 
     private int currentPlayerIndex = 0;
-    private int currentDeckIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +44,8 @@ public class TheGame extends AppCompatActivity {
 
         Intent intent = getIntent();
         playerList = intent.getStringArrayListExtra("player_list");
-        deck = new ArrayList<>();
+        deckToShuffle = new ArrayList<>();
+        deck = new LinkedList<>();
         Log.d("CREATION", "player list: " + playerList.toString());
         cardDesc = findViewById(R.id.card_description);
         cardExp = findViewById(R.id.cardExp);
@@ -102,10 +105,8 @@ public class TheGame extends AppCompatActivity {
             currentPlayerIndex++;
         }
 
-        if (currentDeckIndex == deck.size() - 1) {
-            currentDeckIndex = 0;
-        }else {
-            currentDeckIndex++;
+        if (deck.size() == 0) {
+            shuffleDeck();
         }
 
         setCurrentRoundInfo();
@@ -114,7 +115,8 @@ public class TheGame extends AppCompatActivity {
 
     private void setCurrentRoundInfo() {
         playerName.setText(playerList.get(currentPlayerIndex));
-        Card startingCard = deck.get(currentDeckIndex);
+        Card startingCard = deck.remove();
+        deckToShuffle.add(startingCard);
 
         cardType.setText(startingCard.getCardType().name());
         cardDesc.setText(startingCard.getText());
@@ -128,13 +130,19 @@ public class TheGame extends AppCompatActivity {
     private void shuffleDeck() {
         Random random = new Random();
 
-        for (int i = deck.size() - 1; i > 0; i--) {
+        for (int i = deckToShuffle.size() - 1; i > 0; i--) {
             int randomPos = random.nextInt(i);
 
-            Card temp = deck.get(i);
-            deck.set(i, deck.get(randomPos));
-            deck.set(randomPos, temp);
+            Card temp = deckToShuffle.get(i);
+            deckToShuffle.set(i, deckToShuffle.get(randomPos));
+            deckToShuffle.set(randomPos, temp);
         }
+
+        for (Card card : deckToShuffle) {
+            deck.add(card);
+        }
+        
+        deckToShuffle.clear();
     }
 
 }
