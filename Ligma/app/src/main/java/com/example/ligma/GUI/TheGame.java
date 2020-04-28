@@ -106,12 +106,12 @@ public class TheGame extends AppCompatActivity {
         Card card5 = new Card(5, CardType.CHALLENGE, "DUEL", "jifjsdogjiogj sdogjsdfoig jdfsiogjiogjdfiog jdfogdjsfiog jsdfiog gdjsdjgiosdfjiojg iodfgjdiofsgjdios jsdg dsjgdiosfgj sd ");
         Card card6 = new Card(6, CardType.FUNCTION, "TOILET", " remember to flush if you do the poo poo", "T");
 
-        deck.add(card1);
-        deck.add(card2);
-        deck.add(card3);
-        deck.add(card4);
-        deck.add(card5);
-        deck.add(card6);
+        deckToShuffle.add(card1);
+        deckToShuffle.add(card2);
+        deckToShuffle.add(card3);
+        deckToShuffle.add(card4);
+        deckToShuffle.add(card5);
+        deckToShuffle.add(card6);
     }
 
     private void startGame() {
@@ -140,15 +140,18 @@ public class TheGame extends AppCompatActivity {
 
         cardType.setText(startingCard.getCardType().name());
         cardDesc.setText(startingCard.getText());
-        cardExp.setText("");
 
         if (startingCard.getCardType() != CardType.DRINK) {
             cardExp.setText(startingCard.getEffectExplanation());
+        }else {
+            cardExp.setText("");
         }
 
         if(startingCard.getCardType()== CardType.FUNCTION){
             cardSym.setText(startingCard.getCardSymbol());
             addToInventory(startingCard);
+        }else {
+            cardSym.setText("");
         }
     }
 
