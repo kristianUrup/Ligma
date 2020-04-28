@@ -1,6 +1,7 @@
 package com.example.ligma.BE;
 
 public class Card {
+    private  String cardSymbol;
     private int id;
     private CardType cardType;
     private String text;
@@ -17,6 +18,13 @@ public class Card {
         this.cardType = cardType;
         this.text = text;
         this.effectExplanation = effectExplanation;
+    }
+    public Card(int id, CardType cardType, String text, String effectExplanation, String cardSymbol) {
+        this.id  = id;
+        this.cardType = cardType;
+        this.text = text;
+        this.effectExplanation = effectExplanation;
+        this.cardSymbol = cardSymbol;
     }
 
     public int getId() {
@@ -46,4 +54,8 @@ public class Card {
     public void setEffectExplanation(String effectExplanation) {
         this.effectExplanation = effectExplanation;
     }
+
+    public String getCardSymbol() {return cardSymbol; }
+
+    public void setCardSymbol(String cardSymbol) { this.cardSymbol = cardSymbol; }
 }

@@ -5,17 +5,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import java.util.ArrayList;
-import java.util.List;
-import android.widget.ArrayAdapter;
-import android.view.MotionEvent;
+import java.util.stream.Collectors;
+
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.ligma.BE.Card;
 import com.example.ligma.BE.Player;
 import com.example.ligma.BE.CardType;
+import com.example.ligma.LOGIC.CustomAdapter;
 import com.example.ligma.LOGIC.OnSwipeTouchListener;
 import com.example.ligma.R;
 public class TheGame extends AppCompatActivity {
@@ -31,7 +33,7 @@ public class TheGame extends AppCompatActivity {
     ArrayList<Player> playerList;
 
     FrameLayout cardLayout;
-    int count = 0;
+    int turnIndex = 0;
 
     private int currentPlayerIndex = 0;
     private int currentDeckIndex = 0;
@@ -60,6 +62,7 @@ public class TheGame extends AppCompatActivity {
         playerName = findViewById(R.id.player_name);
         inventory = findViewById(R.id.inventory_layout);
         cardLayout = findViewById(R.id.cardLayout);
+
 
         cardLayout.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
@@ -95,12 +98,14 @@ public class TheGame extends AppCompatActivity {
         Card card3 = new Card(3, CardType.DRINK, "poopeee stinkyyyyy");
         Card card4 = new Card(4, CardType.DRINK, "argh argh argh argh 3 drink yes");
         Card card5 = new Card(5, CardType.CHALLENGE, "DUEL", "jifjsdogjiogj sdogjsdfoig jdfsiogjiogjdfiog jdfogdjsfiog jsdfiog gdjsdjgiosdfjiojg iodfgjdiofsgjdios jsdg dsjgdiosfgj sd ");
+        Card card6 = new Card(6, CardType.FUNCTION, "TOILET", " remember to flush if you do the poo poo", "T");
 
         deck.add(card1);
         deck.add(card2);
         deck.add(card3);
         deck.add(card4);
         deck.add(card5);
+        deck.add(card6);
     }
 
     private void startGame() {
@@ -122,11 +127,10 @@ public class TheGame extends AppCompatActivity {
         }
 
         setCurrentRoundInfo();
-
     }
 
     private void setCurrentRoundInfo() {
-        showPlayerInfo(playerList.get(count));
+        showPlayerInfo(playerList.get(turnIndex));
         Card startingCard = deck.get(currentDeckIndex);
 
         cardType.setText(startingCard.getCardType().name());
@@ -142,5 +146,18 @@ public class TheGame extends AppCompatActivity {
         playerName.setText(player.getName());
 
 
+        ArrayList<Card> cards = player.getInventory().stream()
+                .filter(card ->  card.getCardSymbol() != null && !card.getCardSymbol().isEmpty())
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        ListAdapter adapter = new CustomAdapter(getApplicationContext(),
+                android.R.layout.simple_list_item_1,cards, player);
+
+        final int adapterCount = adapter.getCount();
+
+        for (int i = 0; i < adapterCount; i++) {
+            View item = adapter.getView(i, null, null);
+            inventory.addView(item);
+        }
     }
 }
