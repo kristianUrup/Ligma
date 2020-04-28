@@ -200,7 +200,6 @@ public class TheGame extends AppCompatActivity {
         ArrayList<Card> currentCards = player.getInventory();
         currentCards.add(cardToAdd);
         player.setInventory(currentCards);
-        nextTurn();
     }
 
 }
