@@ -13,7 +13,8 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="50dp"
         android:text="The Rules:"
-        android:textSize="24sp"
+        android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,17 +25,86 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="30dp"
         android:text="Rounds:"
-        android:textSize="18sp"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ruleView" />
 
     <TextView
         android:id="@+id/roundText"
-        android:layout_width="417dp"
-        android:layout_height="14dp"
-        android:layout_marginStart="28dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:gravity="left"
         android:text="The game is based on rounds. Every round a player draws a card. There different type of cards. DRINK, CHALLENGE and FUNCTIONAL"
-        android:textSize="8sp"
+        android:textSize="18sp"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/roundView" />
+
+    <TextView
+        android:id="@+id/drinkCardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:text="DRINK Card:"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roundText" />
+
+    <TextView
+        android:id="@+id/drinkCardText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:text="The current player has to do what the card says"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/drinkCardView" />
+
+    <TextView
+        android:id="@+id/challengeCardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:text="CHALLENGE Card:"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/drinkCardText" />
+
+    <TextView
+        android:id="@+id/challengeCardText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:text="A form of challenge/event that occurs when the card is picked. Two or more players are part of this challenge. This is also specified by the card"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/challengeCardView" />
+
+    <TextView
+        android:id="@+id/functionCardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:text="FUNCTION Card:"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/challengeCardText" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:text="A card that has a function to it. This will be added to the current players inventory when picked. A player can only use it on theirs turn"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/functionCardView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
