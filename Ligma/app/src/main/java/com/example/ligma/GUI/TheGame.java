@@ -130,13 +130,6 @@ public class TheGame extends AppCompatActivity {
         if (deck.size() == 0) {
             shuffleDeck();
         }
-        Card card = deck.remove();
-        if(card.getCardType()== CardType.FUNCTION){
-            cardSym.setText(card.getCardSymbol());
-        }
-        else{
-            cardSym.setText("");
-        }
         setCurrentRoundInfo();
     }
 
@@ -154,6 +147,7 @@ public class TheGame extends AppCompatActivity {
         }
 
         if(startingCard.getCardType()== CardType.FUNCTION){
+            cardSym.setText(startingCard.getCardSymbol());
             addToInventory(startingCard);
         }
     }
@@ -196,10 +190,11 @@ public class TheGame extends AppCompatActivity {
 
     public void addToInventory(Card cardToAdd){
         Player player = playerList.get(currentPlayerIndex);
-
-        ArrayList<Card> currentCards = player.getInventory();
-        currentCards.add(cardToAdd);
-        player.setInventory(currentCards);
+        player.addToInventory(cardToAdd);
+        Log.d(TAG, "Added card to inventory");
+        for (Card card : player.getInventory()) {
+            Log.d(TAG, "Card in inventory: " + card.getText());
+        }
     }
 
 }
