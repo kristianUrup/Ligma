@@ -40,7 +40,7 @@ public class CustomAdapter extends ArrayAdapter<Card> {
     @Override
     public View getView(int position, View view, ViewGroup parent){
 
-        LinearLayout llayout = view.findViewById(R.id.inventory_layout);
+        LinearLayout layout = view.findViewById(R.id.inventory_layout);
 
         int width = 30;
         int height = width;
@@ -50,7 +50,7 @@ public class CustomAdapter extends ArrayAdapter<Card> {
         Card card = sortedCards.get(position);
 
         String cardSymbol = card.getCardSymbol();
-        TextView cardTxtView = new TextView(llayout.getContext());
+        TextView cardTxtView = new TextView(layout.getContext());
         cardTxtView.setText(cardSymbol);
 
         cardTxtView.setLayoutParams(txtViewParams);
