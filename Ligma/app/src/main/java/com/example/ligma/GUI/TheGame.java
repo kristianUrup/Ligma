@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import com.example.ligma.BE.Card;
 import com.example.ligma.BE.CardType;
-import com.example.ligma.BE.Database.FirebaseDB;
 import com.example.ligma.LOGIC.OnSwipeTouchListener;
 import com.example.ligma.R;
 import com.google.android.gms.tasks.OnCompleteListener;
