@@ -1,5 +1,6 @@
 package com.example.ligma.GUI;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -17,8 +18,14 @@ import android.widget.Toast;
 
 import com.example.ligma.BE.Card;
 import com.example.ligma.BE.CardType;
+import com.example.ligma.BE.Database.FirebaseDB;
 import com.example.ligma.LOGIC.OnSwipeTouchListener;
 import com.example.ligma.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class TheGame extends AppCompatActivity {
 
@@ -33,6 +40,10 @@ public class TheGame extends AppCompatActivity {
 
     private int currentPlayerIndex = 0;
     private int currentDeckIndex = 0;
+
+    FirebaseFirestore db;
+
+    String TAG = "read";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +60,8 @@ public class TheGame extends AppCompatActivity {
         playerName = findViewById(R.id.player_name);
         inventory = findViewById(R.id.inventory_layout);
         cardLayout = findViewById(R.id.cardLayout);
+
+        db = FirebaseFirestore.getInstance();
 
         cardLayout.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
@@ -81,6 +94,8 @@ public class TheGame extends AppCompatActivity {
         Card card3 = new Card(3, CardType.DRINK, "poopeee stinkyyyyy");
         Card card4 = new Card(4, CardType.DRINK, "argh argh argh argh 3 drink yes");
         Card card5 = new Card(5, CardType.CHALLENGE, "DUEL", "jifjsdogjiogj sdogjsdfoig jdfsiogjiogjdfiog jdfogdjsfiog jsdfiog gdjsdjgiosdfjiojg iodfgjdiofsgjdios jsdg dsjgdiosfgj sd ");
+
+        readCards();
 
         deck.add(card1);
         deck.add(card2);
@@ -122,5 +137,23 @@ public class TheGame extends AppCompatActivity {
         if (startingCard.getCardType() != CardType.DRINK) {
             cardExp.setText(startingCard.getEffectExplanation());
         }
+    }
+
+    public void readCards(){
+        db.collection("cards")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()) {
+                            for(QueryDocumentSnapshot document : task.getResult()){
+                                deck.add(document.toObject(Card.class));
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.w(TAG, "Reading document resulted in error.", task.getException());
+                        }
+                    }
+                });
     }
 }
