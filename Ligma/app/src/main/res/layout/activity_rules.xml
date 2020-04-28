@@ -6,4 +6,35 @@
     android:layout_height="match_parent"
     tools:context=".GUI.Rules">
 
+    <TextView
+        android:id="@+id/ruleView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="50dp"
+        android:text="The Rules:"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/roundView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:text="Rounds:"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ruleView" />
+
+    <TextView
+        android:id="@+id/roundText"
+        android:layout_width="417dp"
+        android:layout_height="14dp"
+        android:layout_marginStart="28dp"
+        android:text="The game is based on rounds. Every round a player draws a card. There different type of cards. DRINK, CHALLENGE and FUNCTIONAL"
+        android:textSize="8sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roundView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
