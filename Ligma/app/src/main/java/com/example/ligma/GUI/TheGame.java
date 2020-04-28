@@ -7,6 +7,11 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Random;
+
+
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
@@ -22,9 +27,8 @@ import com.example.ligma.LOGIC.OnSwipeTouchListener;
 import com.example.ligma.R;
 public class TheGame extends AppCompatActivity {
 
-
-    ArrayList<Card> deck;
-
+    ArrayList<Card> deckToShuffle;
+    Queue<Card> deck;
     TextView cardDesc;
     TextView playerName;
     TextView cardExp;
@@ -36,7 +40,6 @@ public class TheGame extends AppCompatActivity {
     int turnIndex = 0;
 
     private int currentPlayerIndex = 0;
-    private int currentDeckIndex = 0;
 
 
     @Override
@@ -52,8 +55,9 @@ public class TheGame extends AppCompatActivity {
             Player playerToAdd = new Player(playerName, new ArrayList<>());
             playerList.add(playerToAdd);
         }
-        deck = new ArrayList<>();
 
+        deckToShuffle = new ArrayList<>();
+        deck = new LinkedList<>();
         Log.d("CREATION", "player list: " + playerList.toString());
 
         cardDesc = findViewById(R.id.card_description);
@@ -62,7 +66,6 @@ public class TheGame extends AppCompatActivity {
         playerName = findViewById(R.id.player_name);
         inventory = findViewById(R.id.inventory_layout);
         cardLayout = findViewById(R.id.cardLayout);
-
 
         cardLayout.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
@@ -110,6 +113,7 @@ public class TheGame extends AppCompatActivity {
 
     private void startGame() {
         initDeck();
+        shuffleDeck();
         setCurrentRoundInfo();
     }
 
@@ -120,10 +124,8 @@ public class TheGame extends AppCompatActivity {
             currentPlayerIndex++;
         }
 
-        if (currentDeckIndex == deck.size() - 1) {
-            currentDeckIndex = 0;
-        }else {
-            currentDeckIndex++;
+        if (deck.size() == 0) {
+            shuffleDeck();
         }
 
         setCurrentRoundInfo();
@@ -131,7 +133,8 @@ public class TheGame extends AppCompatActivity {
 
     private void setCurrentRoundInfo() {
         showPlayerInfo(playerList.get(turnIndex));
-        Card startingCard = deck.get(currentDeckIndex);
+        Card startingCard = deck.remove();
+        deckToShuffle.add(startingCard);
 
         cardType.setText(startingCard.getCardType().name());
         cardDesc.setText(startingCard.getText());
@@ -144,7 +147,6 @@ public class TheGame extends AppCompatActivity {
 
     private void showPlayerInfo(Player player){
         playerName.setText(player.getName());
-
 
         ArrayList<Card> cards = player.getInventory().stream()
                 .filter(card ->  card.getCardSymbol() != null && !card.getCardSymbol().isEmpty())
@@ -160,4 +162,23 @@ public class TheGame extends AppCompatActivity {
             inventory.addView(item);
         }
     }
+
+    private void shuffleDeck() {
+        Random random = new Random();
+
+        for (int i = deckToShuffle.size() - 1; i > 0; i--) {
+            int randomPos = random.nextInt(i);
+
+            Card temp = deckToShuffle.get(i);
+            deckToShuffle.set(i, deckToShuffle.get(randomPos));
+            deckToShuffle.set(randomPos, temp);
+        }
+
+        for (Card card : deckToShuffle) {
+            deck.add(card);
+        }
+
+        deckToShuffle.clear();
+    }
+
 }
