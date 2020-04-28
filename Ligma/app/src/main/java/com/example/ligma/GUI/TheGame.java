@@ -27,6 +27,7 @@ import com.example.ligma.LOGIC.OnSwipeTouchListener;
 import com.example.ligma.R;
 public class TheGame extends AppCompatActivity {
 
+    private static final String TAG = "TAG";
     ArrayList<Card> deckToShuffle;
     Queue<Card> deck;
     TextView cardDesc;
@@ -35,9 +36,9 @@ public class TheGame extends AppCompatActivity {
     TextView cardType;
     LinearLayout inventory;
     ArrayList<Player> playerList;
+    TextView cardSym;
 
     FrameLayout cardLayout;
-    int turnIndex = 0;
 
     private int currentPlayerIndex = 0;
 
@@ -60,12 +61,14 @@ public class TheGame extends AppCompatActivity {
         deck = new LinkedList<>();
         Log.d("CREATION", "player list: " + playerList.toString());
 
+        cardSym = findViewById(R.id.card_symbol);
         cardDesc = findViewById(R.id.card_description);
         cardExp = findViewById(R.id.cardExp);
         cardType = findViewById(R.id.cardType);
         playerName = findViewById(R.id.player_name);
         inventory = findViewById(R.id.inventory_layout);
         cardLayout = findViewById(R.id.cardLayout);
+
 
         cardLayout.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
@@ -127,12 +130,18 @@ public class TheGame extends AppCompatActivity {
         if (deck.size() == 0) {
             shuffleDeck();
         }
-
+        Card card = deck.remove();
+        if(card.getCardType()== CardType.FUNCTION){
+            cardSym.setText(card.getCardSymbol());
+        }
+        else{
+            cardSym.setText("");
+        }
         setCurrentRoundInfo();
     }
 
     private void setCurrentRoundInfo() {
-        showPlayerInfo(playerList.get(turnIndex));
+        showPlayerInfo(playerList.get(currentPlayerIndex));
         Card startingCard = deck.remove();
         deckToShuffle.add(startingCard);
 
@@ -142,6 +151,10 @@ public class TheGame extends AppCompatActivity {
 
         if (startingCard.getCardType() != CardType.DRINK) {
             cardExp.setText(startingCard.getEffectExplanation());
+        }
+
+        if(startingCard.getCardType()== CardType.FUNCTION){
+            addToInventory(startingCard);
         }
     }
 
@@ -179,6 +192,15 @@ public class TheGame extends AppCompatActivity {
         }
 
         deckToShuffle.clear();
+    }
+
+    public void addToInventory(Card cardToAdd){
+        Player player = playerList.get(currentPlayerIndex);
+
+        ArrayList<Card> currentCards = player.getInventory();
+        currentCards.add(cardToAdd);
+        player.setInventory(currentCards);
+        nextTurn();
     }
 
 }
