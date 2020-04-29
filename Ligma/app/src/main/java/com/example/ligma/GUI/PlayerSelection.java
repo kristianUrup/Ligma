@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
 import java.io.ByteArrayOutputStream;
@@ -41,6 +42,7 @@ public class PlayerSelection extends Activity {
     TextView errorText;
     ImageView imgCamera;
     String imgCameraString;
+    ArrayList<String> images;
     private final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP = 101;
     static int PERMISSION_REQUEST_CODE = 1;
 
@@ -49,7 +51,9 @@ public class PlayerSelection extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_selection);
 
+        images = new ArrayList<>();
         checkPermission();
+
 
         listView = findViewById(R.id.LviewPlayers);
         AddNewPlayer = findViewById(R.id.btnAddNewPlayer);
@@ -78,9 +82,10 @@ public class PlayerSelection extends Activity {
         });
     }
 
-    private void imageToString(Bitmap bitmap) {
+    private String imageToString(Bitmap bitmap) {
         String encodedImage = encodeToBase64(bitmap, Bitmap.CompressFormat.PNG, 100);
-        player.setImage(encodedImage);
+        images.add(encodedImage);
+        return encodedImage;
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -91,7 +96,7 @@ public class PlayerSelection extends Activity {
                 Log.d(TAG, "Size of bitmap = " + imageBitmap.getByteCount());
                 int height = imgCamera.getHeight();
                 int width = imgCamera.getWidth();
-                FrameLayout.LayoutParams params  = new FrameLayout.LayoutParams(width, height);
+                ConstraintLayout.LayoutParams params  = new ConstraintLayout.LayoutParams(width, height);
                 imgCamera.setLayoutParams(params);
                 imgCamera.setImageBitmap(imageBitmap);
                 imgCameraString = imageToString(imageBitmap);

@@ -62,6 +62,7 @@ public class TheGame extends AppCompatActivity {
 
         for (String playerName: playerListAsString) {
             Player playerToAdd = new Player(playerName, new ArrayList<>());
+            
             playerList.add(playerToAdd);
         }
 
