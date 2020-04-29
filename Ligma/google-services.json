@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "170419791017",
+    "firebase_url": "https://ligma-drink-and-drive.firebaseio.com",
+    "project_id": "ligma-drink-and-drive",
+    "storage_bucket": "ligma-drink-and-drive.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:170419791017:android:41b6ac1d03a39c842ff5b8",
+        "android_client_info": {
+          "package_name": "com.example.ligma"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "170419791017-657t5bbt5vbd0n0oqj8b4aliggvqe55q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ligma",
+            "certificate_hash": "00736527c8b56a74b607abf24f67bfe1838521fd"
+          }
+        },
+        {
+          "client_id": "170419791017-b7ko761tie76sf2g5ppfacpbmal7emsv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdGLBx0HQAVgaB8daDXN3eQiZlW4TYDT4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "170419791017-b7ko761tie76sf2g5ppfacpbmal7emsv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

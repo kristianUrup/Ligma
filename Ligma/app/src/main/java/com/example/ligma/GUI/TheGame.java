@@ -150,7 +150,7 @@ public class TheGame extends AppCompatActivity {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                             }
                         } else {
-                            Log.w(TAG, "Reading document resulted in error.", task.getException());
+                            Log.w(TAG, "Reading documents resulted in error.", task.getException());
                         }
                     }
                 });
