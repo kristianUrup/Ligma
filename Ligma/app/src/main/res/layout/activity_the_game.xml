@@ -79,4 +79,18 @@
         app:layout_constraintTop_toBottomOf="@+id/player_name"
         android:layout_width="300dp"></LinearLayout>
 
+    <ImageView
+        android:id="@+id/imgPlayer"
+        android:layout_width="76dp"
+        android:layout_height="69dp"
+        android:layout_marginStart="298dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="37dp"
+        android:layout_marginBottom="14dp"
+        app:layout_constraintBottom_toTopOf="@+id/inventory_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardLayout"
+        app:srcCompat="@drawable/defaultpicture" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

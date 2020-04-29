@@ -7,10 +7,11 @@
     tools:context=".GUI.PlayerSelection">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnAdd"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="146dp"
+        android:layout_marginTop="6dp"
         android:layout_marginEnd="146dp"
         android:layout_marginBottom="36dp"
         android:onClick="onClickStart"
@@ -19,21 +20,24 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtViewErrorText" />
 
     <EditText
         android:id="@+id/txtNewPlayer"
         android:layout_width="213dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="99dp"
-        android:layout_marginTop="37dp"
+        android:layout_marginTop="44dp"
         android:layout_marginEnd="99dp"
+        android:layout_marginBottom="14dp"
         android:ems="10"
         android:hint="@string/newPlayerName"
         android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/btnAddNewPlayer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img_camera" />
+        app:layout_constraintTop_toBottomOf="@+id/imgCamera" />
 
     <ListView
         android:id="@+id/LviewPlayers"
@@ -50,7 +54,7 @@
         android:layout_marginStart="161dp"
         android:layout_marginTop="14dp"
         android:layout_marginEnd="162dp"
-        android:layout_marginBottom="34dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/addPlayer"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/txtViewErrorText"
@@ -63,24 +67,28 @@
         android:layout_width="312dp"
         android:layout_height="43dp"
         android:layout_marginStart="48dp"
+        android:layout_marginTop="2dp"
         android:layout_marginEnd="51dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="15dp"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/btnAdd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnAddNewPlayer" />
 
     <ImageView
-        android:id="@+id/img_camera"
-        android:layout_width="181dp"
-        android:layout_height="123dp"
-        android:layout_marginStart="115dp"
-        android:layout_marginTop="21dp"
-        android:layout_marginEnd="115dp"
+        android:id="@+id/imgCamera"
+        android:layout_width="166dp"
+        android:layout_height="138dp"
+        android:layout_marginStart="122dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="123dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/defaultpicture"
+        app:layout_constraintBottom_toTopOf="@+id/txtNewPlayer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LviewPlayers"
-        app:srcCompat="@drawable/defaultpicture" />
+        app:layout_constraintTop_toBottomOf="@+id/LviewPlayers" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

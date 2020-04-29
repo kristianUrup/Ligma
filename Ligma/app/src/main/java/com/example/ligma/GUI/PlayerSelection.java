@@ -34,7 +34,8 @@ public class PlayerSelection extends Activity {
     String TAG = TheGame.TAG;
     ListView listView;
     ArrayList<String> list;
-    Button addBtn;
+    Button AddBtn;
+    Button AddNewPlayer;
     EditText editText;
     ArrayAdapter<String> arrayAdapter;
     TextView errorText;
@@ -51,10 +52,11 @@ public class PlayerSelection extends Activity {
         checkPermission();
 
         listView = findViewById(R.id.LviewPlayers);
-        addBtn = findViewById(R.id.btnAddNewPlayer);
+        AddNewPlayer = findViewById(R.id.btnAddNewPlayer);
+        AddBtn = findViewById(R.id.btnAdd);
         editText = findViewById(R.id.txtNewPlayer);
         errorText = findViewById(R.id.txtViewErrorText);
-        imgCamera = findViewById(R.id.img_camera);
+        imgCamera = findViewById(R.id.imgCamera);
         imgCamera.setOnClickListener(view -> takePicture());
 
         list = new ArrayList<>();
@@ -92,7 +94,7 @@ public class PlayerSelection extends Activity {
                 FrameLayout.LayoutParams params  = new FrameLayout.LayoutParams(width, height);
                 imgCamera.setLayoutParams(params);
                 imgCamera.setImageBitmap(imageBitmap);
-                imageToString(imageBitmap);
+                imgCameraString = imageToString(imageBitmap);
             }
         }
     }
@@ -137,29 +139,36 @@ public class PlayerSelection extends Activity {
     }
 
     private void checkAndAddPlayer(){
-        if(!TextUtils.isEmpty(editText.getText().toString())){
-            addBtn.setOnClickListener(new View.OnClickListener() {
+        if(!TextUtils.isEmpty(editText.getText().toString()) && imgCamera.isDirty()) {
+            AddNewPlayer.setVisibility(View.VISIBLE);
+            AddNewPlayer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v){
-                    if(!TextUtils.isEmpty(editText.getText().toString())){
+                    if(!TextUtils.isEmpty(editText.getText().toString()) && imgCamera.isDirty()){
                         addToListView();
+                    }
+                    if(listView.getCount() > 1)
+                    {
+                        AddBtn.setVisibility(View.VISIBLE);
                     }
                 }
             });
         } else {
-            String noNameErrorText = "You must fill out a name before adding them.";
+            String noNameErrorText = "You must fill out a name and add a photo before adding them.";
             editText.setError(noNameErrorText);
         }
     }
 
     private void addToListView(){
         String names = editText.getText().toString();
-
+        AddNewPlayer.setVisibility(View.VISIBLE);
         list.add(names);
         listView.setAdapter(arrayAdapter);
         arrayAdapter.notifyDataSetChanged();
 
         errorText.setText("");
+        editText.setText("");
+        AddBtn.setVisibility(View.INVISIBLE);
     }
 
     public void onClickStart(View view){
