@@ -27,6 +27,7 @@ import com.example.ligma.LOGIC.OnSwipeTouchListener;
 import com.example.ligma.R;
 public class TheGame extends AppCompatActivity {
 
+    public static String TAG = "Ligma";
     ArrayList<Card> deckToShuffle;
     Queue<Card> deck;
     TextView cardDesc;

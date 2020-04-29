@@ -4,7 +4,7 @@
 
     <uses-feature
         android:name="android.hardware.Camera"
-        android:required="false"/>
+        android:required="true"/>
 
     <application
         android:allowBackup="true"
