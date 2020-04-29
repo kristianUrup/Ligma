@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:gravity="left"
-        android:text="The game is based on rounds. Every round a player draws a card. There different type of cards. DRINK, CHALLENGE and FUNCTIONAL"
+        android:text="The game is based on rounds. Every round a player draws a card. There are different types of cards. DRINK, CHALLENGE and FUNCTION"
         android:textSize="18sp"
 
         app:layout_constraintStart_toStartOf="parent"
