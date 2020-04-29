@@ -42,6 +42,7 @@ public class TheGame extends AppCompatActivity {
     TextView cardExp;
     TextView cardType;
     LinearLayout inventory;
+    ArrayList<String> playerImageList;
     ArrayList<Player> playerList;
     ImageView imgPlayer;
 
@@ -55,19 +56,29 @@ public class TheGame extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_the_game);
+
         playerList = new ArrayList<>();
+        playerImageList = new ArrayList<>();
 
         Intent intent = getIntent();
         ArrayList<String> playerListAsString = intent.getStringArrayListExtra("player_list");
 
+        Intent imgIntent = getIntent();
+        ArrayList<String> playerImageListAsString = imgIntent.getStringArrayListExtra("image_list");
+
+
         for (String playerName: playerListAsString) {
-            Player playerToAdd = new Player(playerName, new ArrayList<>());
-            
-            playerList.add(playerToAdd);
+
+            for(String playerImage: playerImageListAsString)
+            {
+                Player playerToAdd = new Player(playerName, new ArrayList<>(), playerImage);
+                playerList.add(playerToAdd);
+            }
         }
 
         deckToShuffle = new ArrayList<>();
         deck = new LinkedList<>();
+        Log.d("CREATION", "playerImageList:" + playerImageList.toString());
         Log.d("CREATION", "player list: " + playerList.toString());
 
         cardDesc = findViewById(R.id.card_description);
@@ -162,6 +173,7 @@ public class TheGame extends AppCompatActivity {
         byte[] decodedBytes = Base64.decode(player.getImage(), Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
         imgPlayer.setImageBitmap(bitmap);
+
 
         ArrayList<Card> cards = player.getInventory().stream()
                 .filter(card ->  card.getCardSymbol() != null && !card.getCardSymbol().isEmpty())

@@ -7,9 +7,10 @@ public class Player {
     private String image;
     private ArrayList<Card> inventory;
 
-    public Player(String name, ArrayList<Card> inventory) {
+    public Player(String name, ArrayList<Card> inventory, String image) {
         this.name = name;
         this.inventory = inventory;
+        this.image = image;
     }
 
     public String getImage() {

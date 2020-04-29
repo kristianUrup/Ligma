@@ -31,7 +31,6 @@ import com.example.ligma.BE.Player;
 import com.example.ligma.R;
 
 public class PlayerSelection extends Activity {
-    Player player;
     String TAG = TheGame.TAG;
     ListView listView;
     ArrayList<String> list;
@@ -53,7 +52,6 @@ public class PlayerSelection extends Activity {
 
         images = new ArrayList<>();
         checkPermission();
-
 
         listView = findViewById(R.id.LviewPlayers);
         AddNewPlayer = findViewById(R.id.btnAddNewPlayer);
@@ -139,18 +137,20 @@ public class PlayerSelection extends Activity {
 
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP);
+
         } else
             Log.d(TAG, "camera app could NOT be started");
     }
 
     private void checkAndAddPlayer(){
-        if(!TextUtils.isEmpty(editText.getText().toString()) && imgCamera.isDirty()) {
+        if(!TextUtils.isEmpty(editText.getText().toString())) {
             AddNewPlayer.setVisibility(View.VISIBLE);
             AddNewPlayer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v){
-                    if(!TextUtils.isEmpty(editText.getText().toString()) && imgCamera.isDirty()){
+                    if(!TextUtils.isEmpty(editText.getText().toString())){
                         addToListView();
+                        imgCamera.setImageResource(R.drawable.defaultpicture);
                     }
                     if(listView.getCount() > 1)
                     {
@@ -183,6 +183,7 @@ public class PlayerSelection extends Activity {
         }else {
             Intent startGameIntent = new Intent(this, TheGame.class);
             startGameIntent.putStringArrayListExtra("player_list", list);
+            startGameIntent.putStringArrayListExtra("image_list", images);
             startActivity(startGameIntent);
         }
     }
