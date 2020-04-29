@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">Ligma</string>
-    <string name="start_game">Start spil</string>
-    <string name="rules">Regler</string>
-    <string name="start">Start</string>
+    <string name="New_Game">New Game</string>
+    <string name="rules">Rules</string>
+    <string name="start">Start Game</string>
     <string name="newPlayerName">Name</string>
     <string name="addPlayer">Add player</string>
+    <string name="Camera">Take Picture</string>
 </resources>

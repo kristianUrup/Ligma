@@ -6,27 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".GUI.PlayerSelection">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="56dp"
-        android:layout_height="51dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginBottom="124dp"
-        android:clickable="true"
-        android:src="@android:drawable/ic_menu_add"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
     <Button
         android:id="@+id/button"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="177dp"
-        android:layout_marginTop="618dp"
+        android:layout_marginTop="632dp"
         android:layout_marginEnd="146dp"
         android:onClick="onClickStart"
+        android:visibility="invisible"
         android:text="@string/start"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.468"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,15 +25,11 @@
         android:id="@+id/txtNewPlayer"
         android:layout_width="213dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="69dp"
-        android:layout_marginEnd="182dp"
         android:ems="10"
         android:hint="@string/newPlayerName"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/LviewPlayers" />
+        tools:layout_editor_absoluteX="99dp"
+        tools:layout_editor_absoluteY="440dp" />
 
     <ListView
         android:id="@+id/LviewPlayers"
@@ -56,25 +43,39 @@
         android:id="@+id/btnAddNewPlayer"
         android:layout_width="88dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="41dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="53dp"
         android:text="@string/addPlayer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txtNewPlayer"
-        app:layout_constraintTop_toBottomOf="@id/LviewPlayers" />
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="161dp"
+        tools:layout_editor_absoluteY="492dp" />
 
     <TextView
         android:id="@+id/txtViewErrorText"
         android:layout_width="312dp"
         android:layout_height="43dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="256dp"
-        android:layout_marginEnd="79dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="300dp"
+        android:layout_marginEnd="51dp"
+        android:layout_marginBottom="24dp"
         android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/LviewPlayers" />
+
+    <Button
+        android:id="@+id/btnCamera"
+        android:layout_width="128dp"
+        android:layout_height="43dp"
+        android:text="@string/Camera"
+        tools:layout_editor_absoluteX="141dp"
+        tools:layout_editor_absoluteY="374dp" />
+
+    <ImageView
+        android:id="@+id/img_camera"
+        android:layout_width="181dp"
+        android:layout_height="123dp"
+        app:srcCompat="@drawable/userPictureDefault"
+        tools:layout_editor_absoluteX="115dp"
+        tools:layout_editor_absoluteY="251dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

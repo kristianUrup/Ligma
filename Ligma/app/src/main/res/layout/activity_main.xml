@@ -15,7 +15,7 @@
         android:layout_marginEnd="140dp"
         android:fontFamily="sans-serif-smallcaps"
         android:onClick="onClickStartGame"
-        android:text="@string/start_game"
+        android:text="@string/New_Game"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

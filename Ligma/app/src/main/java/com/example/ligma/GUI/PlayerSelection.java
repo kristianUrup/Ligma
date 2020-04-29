@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ public class PlayerSelection extends Activity {
     EditText editText;
     ArrayAdapter<String> arrayAdapter;
     TextView errorText;
+    ImageView imgProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,8 @@ public class PlayerSelection extends Activity {
         addBtn = findViewById(R.id.btnAddNewPlayer);
         editText = findViewById(R.id.txtNewPlayer);
         errorText = findViewById(R.id.txtViewErrorText);
+        imgProfile = findViewById(R.id.img_camera);
+
 
         list = new ArrayList<>();
         arrayAdapter = new ArrayAdapter<>(getApplicationContext(),
