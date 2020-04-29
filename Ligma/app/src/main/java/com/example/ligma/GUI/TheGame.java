@@ -162,15 +162,8 @@ public class TheGame extends AppCompatActivity {
                 .filter(card ->  card.getCardSymbol() != null && !card.getCardSymbol().isEmpty())
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        CustomAdapter adapter = new CustomAdapter(getApplicationContext(),
-                android.R.layout.simple_list_item_1,cards, player);
 
-        final int adapterCount = adapter.getCount();
 
-        for (int i = 0; i < adapterCount; i++) {
-            View item = adapter.getView(i, null, null);
-            inventory.addView(item);
-        }
     }
 
     private void shuffleDeck() {
