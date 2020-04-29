@@ -159,7 +159,7 @@ public class TheGame extends AppCompatActivity {
                 .filter(card ->  card.getCardSymbol() != null && !card.getCardSymbol().isEmpty())
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        ListAdapter adapter = new CustomAdapter(getApplicationContext(),
+        CustomAdapter adapter = new CustomAdapter(getApplicationContext(),
                 android.R.layout.simple_list_item_1,cards, player);
 
         final int adapterCount = adapter.getCount();
