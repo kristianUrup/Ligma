@@ -2,6 +2,7 @@ package com.example.ligma.GUI;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.Random;
 
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -27,6 +29,7 @@ import com.example.ligma.LOGIC.OnSwipeTouchListener;
 import com.example.ligma.R;
 public class TheGame extends AppCompatActivity {
 
+    private static final String TAG = "TAG";
     ArrayList<Card> deckToShuffle;
     Queue<Card> deck;
     TextView cardDesc;
@@ -35,9 +38,9 @@ public class TheGame extends AppCompatActivity {
     TextView cardType;
     LinearLayout inventory;
     ArrayList<Player> playerList;
+    TextView cardSym;
 
     FrameLayout cardLayout;
-    int turnIndex = 0;
 
     private int currentPlayerIndex = 0;
 
@@ -60,12 +63,14 @@ public class TheGame extends AppCompatActivity {
         deck = new LinkedList<>();
         Log.d("CREATION", "player list: " + playerList.toString());
 
+        cardSym = findViewById(R.id.card_symbol);
         cardDesc = findViewById(R.id.card_description);
         cardExp = findViewById(R.id.cardExp);
         cardType = findViewById(R.id.cardType);
         playerName = findViewById(R.id.player_name);
         inventory = findViewById(R.id.inventory_layout);
         cardLayout = findViewById(R.id.cardLayout);
+
 
         cardLayout.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
@@ -85,9 +90,6 @@ public class TheGame extends AppCompatActivity {
         LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-
-        cardDesc.setText("hello officer, drink 2 shots, but Frederik 400 shots");
-        playerName.setText("");
         TextView tvToInsert = new TextView(this);
         tvToInsert.setLayoutParams(lparams);
         this.inventory.addView(tvToInsert);
@@ -96,19 +98,19 @@ public class TheGame extends AppCompatActivity {
     }
 
     private void initDeck() {
-        Card card1 = new Card(1, CardType.DRINK, "goof goof 2 drinks goof goof");
-        Card card2 = new Card(2, CardType.DRINK, "bla bla bla boog boog");
-        Card card3 = new Card(3, CardType.DRINK, "poopeee stinkyyyyy");
-        Card card4 = new Card(4, CardType.DRINK, "argh argh argh argh 3 drink yes");
-        Card card5 = new Card(5, CardType.CHALLENGE, "DUEL", "jifjsdogjiogj sdogjsdfoig jdfsiogjiogjdfiog jdfogdjsfiog jsdfiog gdjsdjgiosdfjiojg iodfgjdiofsgjdios jsdg dsjgdiosfgj sd ");
-        Card card6 = new Card(6, CardType.FUNCTION, "TOILET", " remember to flush if you do the poo poo", "T");
+        Card card1 = new Card(1, CardType.DRINK, "Take 2 drinks");
+        Card card2 = new Card(2, CardType.DRINK, "Give 4 drinks out among the other players");
+        Card card3 = new Card(3, CardType.DRINK, "You and the person to your right both take 2 drinks");
+        Card card4 = new Card(4, CardType.DRINK, "Take 3 drinks. The person to your left takes double that");
+        Card card5 = new Card(5, CardType.CHALLENGE, "DUEL", "The current player challenge another player for a shot of vodka. The one who grims the most has to take two drinks");
+        Card card6 = new Card(6, CardType.FUNCTION, "TOILET", "You are allowed to go to the toilet. Also skips your turn", "T");
 
-        deck.add(card1);
-        deck.add(card2);
-        deck.add(card3);
-        deck.add(card4);
-        deck.add(card5);
-        deck.add(card6);
+        deckToShuffle.add(card1);
+        deckToShuffle.add(card2);
+        deckToShuffle.add(card3);
+        deckToShuffle.add(card4);
+        deckToShuffle.add(card5);
+        deckToShuffle.add(card6);
     }
 
     private void startGame() {
@@ -127,39 +129,41 @@ public class TheGame extends AppCompatActivity {
         if (deck.size() == 0) {
             shuffleDeck();
         }
-
         setCurrentRoundInfo();
     }
 
     private void setCurrentRoundInfo() {
-        showPlayerInfo(playerList.get(turnIndex));
         Card startingCard = deck.remove();
         deckToShuffle.add(startingCard);
 
         cardType.setText(startingCard.getCardType().name());
         cardDesc.setText(startingCard.getText());
-        cardExp.setText("");
 
         if (startingCard.getCardType() != CardType.DRINK) {
             cardExp.setText(startingCard.getEffectExplanation());
+        }else {
+            cardExp.setText("");
         }
+
+        if(startingCard.getCardType()== CardType.FUNCTION){
+            cardSym.setText(startingCard.getCardSymbol());
+            addToInventory(startingCard);
+        }else {
+            cardSym.setText("");
+        }
+        showPlayerInfo(playerList.get(currentPlayerIndex));
     }
 
     private void showPlayerInfo(Player player){
         playerName.setText(player.getName());
 
-        ArrayList<Card> cards = player.getInventory().stream()
-                .filter(card ->  card.getCardSymbol() != null && !card.getCardSymbol().isEmpty())
-                .collect(Collectors.toCollection(ArrayList::new));
-
-        ListAdapter adapter = new CustomAdapter(getApplicationContext(),
-                android.R.layout.simple_list_item_1,cards, player);
-
-        final int adapterCount = adapter.getCount();
-
-        for (int i = 0; i < adapterCount; i++) {
-            View item = adapter.getView(i, null, null);
-            inventory.addView(item);
+        LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        inventory.removeAllViews();
+        for (Card card : player.getInventory()) {
+            Button btn = new Button(this);
+            btn.setText(card.getCardSymbol() + "\n" + card.getText());
+            btn.setLayoutParams(lparams);
+            inventory.addView(btn);
         }
     }
 
@@ -179,6 +183,15 @@ public class TheGame extends AppCompatActivity {
         }
 
         deckToShuffle.clear();
+    }
+
+    public void addToInventory(Card cardToAdd){
+        Player player = playerList.get(currentPlayerIndex);
+        player.addToInventory(cardToAdd);
+        Log.d(TAG, "Added card to inventory");
+        for (Card card : player.getInventory()) {
+            Log.d(TAG, "Card in inventory: " + card.getText());
+        }
     }
 
 }
