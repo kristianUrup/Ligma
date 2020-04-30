@@ -7,6 +7,8 @@ public class Card {
     private String text;
     private String effectExplanation;
 
+    public Card(){}
+
     public Card(int id, CardType cardType, String text) {
         this.id = id;
         this.cardType = cardType;

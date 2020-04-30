@@ -1,5 +1,6 @@
 package com.example.ligma.GUI;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -27,6 +28,12 @@ import com.example.ligma.BE.CardType;
 import com.example.ligma.LOGIC.CustomAdapter;
 import com.example.ligma.LOGIC.OnSwipeTouchListener;
 import com.example.ligma.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 public class TheGame extends AppCompatActivity {
 
     private static final String TAG = "TAG";
@@ -43,6 +50,9 @@ public class TheGame extends AppCompatActivity {
     FrameLayout cardLayout;
 
     private int currentPlayerIndex = 0;
+
+
+    FirebaseFirestore db;
 
 
     @Override
@@ -71,6 +81,7 @@ public class TheGame extends AppCompatActivity {
         inventory = findViewById(R.id.inventory_layout);
         cardLayout = findViewById(R.id.cardLayout);
 
+        db = FirebaseFirestore.getInstance();
 
         cardLayout.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
@@ -111,6 +122,14 @@ public class TheGame extends AppCompatActivity {
         deckToShuffle.add(card4);
         deckToShuffle.add(card5);
         deckToShuffle.add(card6);
+
+        readCards();
+
+        deck.add(card1);
+        deck.add(card2);
+        deck.add(card3);
+        deck.add(card4);
+        deck.add(card5);
     }
 
     private void startGame() {
@@ -194,4 +213,21 @@ public class TheGame extends AppCompatActivity {
         }
     }
 
+    public void readCards(){
+        db.collection("cards")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()) {
+                            for(QueryDocumentSnapshot document : task.getResult()){
+                                deck.add(document.toObject(Card.class));
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.w(TAG, "Reading documents resulted in error.", task.getException());
+                        }
+                    }
+                });
+    }
 }
