@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -140,15 +141,25 @@ public class PlayerSelection extends Activity {
     }
 
     private void checkAndAddPlayer(){
+        Drawable oldDrawable = imgCamera.getDrawable();
         if(!TextUtils.isEmpty(editText.getText().toString())) {
             AddNewPlayer.setVisibility(View.VISIBLE);
             AddNewPlayer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v){
                     if(!TextUtils.isEmpty(editText.getText().toString())){
-                        addToListView();
-                        txtTip.setVisibility(View.INVISIBLE);
-                        imgCamera.setImageResource(R.drawable.defaultpicture);
+                        if (imgCamera.getDrawable() != oldDrawable)
+                        {
+                            Log.d("Testing4", "Hello: " + imgCamera.getDrawable().isFilterBitmap());
+                            addToListView();
+                            txtTip.setVisibility(View.INVISIBLE);
+                            imgCamera.setImageResource(R.drawable.defaultpicture);
+                        }
+                        else
+                        {
+                            String noImageText = "Remember to add a picture.";
+                            editText.setError(noImageText);
+                        }
                     }
                     if(listView.getCount() > 1)
                     {
@@ -157,7 +168,7 @@ public class PlayerSelection extends Activity {
                 }
             });
         } else {
-            String noNameErrorText = "You must fill out a name and add a photo before adding them.";
+            String noNameErrorText = "Add a name and take a picture.";
             editText.setError(noNameErrorText);
         }
     }
@@ -173,10 +184,11 @@ public class PlayerSelection extends Activity {
     }
 
     public void onClickStart(View view){
-        if(list.isEmpty()){
+        if(list.isEmpty()) {
             String startGameWithoutPlayers = "You cannot start a game with no players";
             errorText.setText(startGameWithoutPlayers);
-        }else {
+        }
+        else {
             Intent startGameIntent = new Intent(this, TheGame.class);
             startGameIntent.putStringArrayListExtra("player_list", list);
             startGameIntent.putStringArrayListExtra("image_list", images);

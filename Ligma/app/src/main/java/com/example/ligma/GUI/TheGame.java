@@ -1,5 +1,6 @@
 package com.example.ligma.GUI;
 
+import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -108,6 +109,11 @@ public class TheGame extends AppCompatActivity {
         startGame();
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
+
     private void initDeck() {
         Card card1 = new Card(1, CardType.DRINK, "Take 2 drinks");
         Card card2 = new Card(2, CardType.DRINK, "Give 4 drinks out among the other players");
@@ -169,7 +175,15 @@ public class TheGame extends AppCompatActivity {
         playerName.setText(player.getName());
         byte[] decodedBytes = Base64.decode(player.getImage(), Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-        imgPlayer.setImageBitmap(bitmap);
+
+        if(!(bitmap == null))
+        {
+            imgPlayer.setImageBitmap(bitmap);
+        }
+        else
+        {
+            imgPlayer.setImageResource(R.drawable.defaultpicture);
+        }
 
         Log.d("Testing1", "players: " + player.getName());
         Log.d("Testing2", "players: " + player.getImage());
