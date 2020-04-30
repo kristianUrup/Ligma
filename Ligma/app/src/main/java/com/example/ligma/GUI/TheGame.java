@@ -138,6 +138,10 @@ public class TheGame extends AppCompatActivity {
         deckToShuffle.add(card6);
         deckToShuffle.add(card7);
 
+
+        /**
+         * Readcards doesn't work if there aren't any mock cards above it.
+         */
         readCards();
     }
 
@@ -251,7 +255,7 @@ public class TheGame extends AppCompatActivity {
         }
     }
 
-    public void readCards(){
+    private void readCards(){
         db.collection("cards")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
