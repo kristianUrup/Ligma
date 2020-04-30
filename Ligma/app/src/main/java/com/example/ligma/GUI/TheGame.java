@@ -1,8 +1,10 @@
 package com.example.ligma.GUI;
 
+import androidx.annotation.ColorRes;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import java.util.ArrayList;
@@ -103,7 +105,8 @@ public class TheGame extends AppCompatActivity {
         Card card3 = new Card(3, CardType.DRINK, "You and the person to your right both take 2 drinks");
         Card card4 = new Card(4, CardType.DRINK, "Take 3 drinks. The person to your left takes double that");
         Card card5 = new Card(5, CardType.CHALLENGE, "DUEL", "The current player challenge another player for a shot of vodka. The one who grims the most has to take two drinks");
-        Card card6 = new Card(6, CardType.FUNCTION, "TOILET", "You are allowed to go to the toilet. Also skips your turn", "T");
+        Card card6 = new Card(6, CardType.FUNCTION, "SKIP", "You can skip a round", "S");
+        Card card7 = new Card(6, CardType.FUNCTION, "BAILOUT", "You can bailout", "B");
 
         deckToShuffle.add(card1);
         deckToShuffle.add(card2);
@@ -111,6 +114,7 @@ public class TheGame extends AppCompatActivity {
         deckToShuffle.add(card4);
         deckToShuffle.add(card5);
         deckToShuffle.add(card6);
+        deckToShuffle.add(card7);
     }
 
     private void startGame() {
@@ -161,7 +165,17 @@ public class TheGame extends AppCompatActivity {
         inventory.removeAllViews();
         for (Card card : player.getInventory()) {
             Button btn = new Button(this);
-            btn.setText(card.getCardSymbol() + "\n" + card.getText());
+            if(card.getCardSymbol() == "S"){
+                Drawable s = getDrawable(R.drawable.skip_text);
+                Drawable hotTub = getDrawable(R.drawable.ic_hot_tub_black_24dp);
+                btn.setCompoundDrawablesWithIntrinsicBounds(null, s,null, hotTub);
+            }
+            if(card.getCardSymbol() == "B"){
+                Drawable b = getDrawable(R.drawable.bail_out_text);
+                Drawable bailOutText = getDrawable(R.drawable.bail_out);
+                btn.setCompoundDrawablesWithIntrinsicBounds(null, b,null, bailOutText);
+            }
+            btn.setBackgroundResource(R.drawable.button_inventory);
             btn.setLayoutParams(lparams);
             inventory.addView(btn);
         }
