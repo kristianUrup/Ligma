@@ -109,12 +109,12 @@ public class TheGame extends AppCompatActivity {
     }
 
     private void initDeck() {
-        Card card1 = new Card(1, CardType.DRINK, "Take 2 drinks");
-        Card card2 = new Card(2, CardType.DRINK, "Give 4 drinks out among the other players");
-        Card card3 = new Card(3, CardType.DRINK, "You and the person to your right both take 2 drinks");
-        Card card4 = new Card(4, CardType.DRINK, "Take 3 drinks. The person to your left takes double that");
-        Card card5 = new Card(5, CardType.CHALLENGE, "DUEL", "The current player challenge another player for a shot of vodka. The one who grims the most has to take two drinks");
-        Card card6 = new Card(6, CardType.FUNCTION, "TOILET", "You are allowed to go to the toilet. Also skips your turn", "T");
+        Card card1 = new Card("1", CardType.DRINK, "Take 2 drinks");
+        Card card2 = new Card("2", CardType.DRINK, "Give 4 drinks out among the other players");
+        Card card3 = new Card("3", CardType.DRINK, "You and the person to your right both take 2 drinks");
+        Card card4 = new Card("4", CardType.DRINK, "Take 3 drinks. The person to your left takes double that");
+        Card card5 = new Card("5", CardType.CHALLENGE, "DUEL", "The current player challenge another player for a shot of vodka. The one who grims the most has to take two drinks");
+        Card card6 = new Card("6", CardType.FUNCTION, "TOILET", "You are allowed to go to the toilet. Also skips your turn", "T");
 
         deckToShuffle.add(card1);
         deckToShuffle.add(card2);
