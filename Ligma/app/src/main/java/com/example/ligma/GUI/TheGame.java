@@ -124,14 +124,9 @@ public class TheGame extends AppCompatActivity {
         deckToShuffle.add(card4);
         deckToShuffle.add(card5);
         deckToShuffle.add(card6);
+        deckToShuffle.add(card7);
 
         readCards();
-
-        deck.add(card1);
-        deck.add(card2);
-        deck.add(card3);
-        deck.add(card4);
-        deck.add(card5);
     }
 
     private void startGame() {
@@ -232,7 +227,7 @@ public class TheGame extends AppCompatActivity {
                             for(QueryDocumentSnapshot document : task.getResult()){
                                 Card card = document.toObject(Card.class);
                                 card.setId(document.getId());
-                                deck.add(document.toObject(Card.class));
+                                deckToShuffle.add(document.toObject(Card.class));
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                             }
                         } else {
