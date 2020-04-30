@@ -138,7 +138,7 @@ public class TheGame extends AppCompatActivity {
         deckToShuffle.add(card6);
         deckToShuffle.add(card7);
 
-        //readCards();
+        readCards();
     }
 
     private void startGame() {
