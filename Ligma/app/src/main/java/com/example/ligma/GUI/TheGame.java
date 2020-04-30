@@ -22,6 +22,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.ligma.BE.Card;
+import com.example.ligma.BE.FunctionType;
 import com.example.ligma.BE.Player;
 import com.example.ligma.BE.CardType;
 import com.example.ligma.LOGIC.CustomAdapter;
@@ -103,7 +104,8 @@ public class TheGame extends AppCompatActivity {
         Card card3 = new Card(3, CardType.DRINK, "You and the person to your right both take 2 drinks");
         Card card4 = new Card(4, CardType.DRINK, "Take 3 drinks. The person to your left takes double that");
         Card card5 = new Card(5, CardType.CHALLENGE, "DUEL", "The current player challenge another player for a shot of vodka. The one who grims the most has to take two drinks");
-        Card card6 = new Card(6, CardType.FUNCTION, "TOILET", "You are allowed to go to the toilet. Also skips your turn", "T");
+        Card card6 = new Card(6, CardType.FUNCTION, FunctionType.NONE, "TOILET", "You are allowed to go to the toilet. You still have to do your turn", "T");
+        Card card7 = new Card(7, CardType.FUNCTION, FunctionType.SKIP, "BAIL-OUT", "You are allowed to skip your current turn. Got a tough card? Skip it", "B");
 
         deckToShuffle.add(card1);
         deckToShuffle.add(card2);
