@@ -33,6 +33,7 @@ import com.example.ligma.R;
 public class PlayerSelection extends Activity {
     String TAG = TheGame.TAG;
     ListView listView;
+    TextView txtTip;
     ArrayList<String> list;
     Button AddBtn;
     Button AddNewPlayer;
@@ -52,7 +53,7 @@ public class PlayerSelection extends Activity {
 
         images = new ArrayList<>();
         checkPermission();
-
+        txtTip = findViewById(R.id.txtTip);
         listView = findViewById(R.id.LviewPlayers);
         AddNewPlayer = findViewById(R.id.btnAddNewPlayer);
         AddBtn = findViewById(R.id.btnAdd);
@@ -92,10 +93,6 @@ public class PlayerSelection extends Activity {
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
                 Log.d(TAG, "Size of bitmap = " + imageBitmap.getByteCount());
-                int height = imgCamera.getHeight();
-                int width = imgCamera.getWidth();
-                ConstraintLayout.LayoutParams params  = new ConstraintLayout.LayoutParams(width, height);
-                imgCamera.setLayoutParams(params);
                 imgCamera.setImageBitmap(imageBitmap);
                 imgCameraString = imageToString(imageBitmap);
             }
@@ -150,6 +147,7 @@ public class PlayerSelection extends Activity {
                 public void onClick(View v){
                     if(!TextUtils.isEmpty(editText.getText().toString())){
                         addToListView();
+                        txtTip.setVisibility(View.INVISIBLE);
                         imgCamera.setImageResource(R.drawable.defaultpicture);
                     }
                     if(listView.getCount() > 1)
@@ -170,10 +168,8 @@ public class PlayerSelection extends Activity {
         list.add(names);
         listView.setAdapter(arrayAdapter);
         arrayAdapter.notifyDataSetChanged();
-
         errorText.setText("");
         editText.setText("");
-        AddBtn.setVisibility(View.INVISIBLE);
     }
 
     public void onClickStart(View view){

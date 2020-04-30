@@ -6,4 +6,5 @@
     <string name="newPlayerName">Name</string>
     <string name="addPlayer">Add player</string>
     <string name="Camera">Take Picture</string>
+    <string name="playerSelectionTip">Please add a name and press on the picture to add a custom photo</string>
 </resources>

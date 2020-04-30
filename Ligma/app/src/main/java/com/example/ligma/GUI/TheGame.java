@@ -8,16 +8,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
-
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
-
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
-
-
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -36,7 +32,7 @@ import com.example.ligma.R;
 public class TheGame extends AppCompatActivity {
 
     Player player;
-    private static final String TAG = "TAG";
+    public static final String TAG = "TAG";
     ArrayList<Card> deckToShuffle;
     Queue<Card> deck;
     TextView cardDesc;
@@ -68,19 +64,13 @@ public class TheGame extends AppCompatActivity {
         Intent imgIntent = getIntent();
         ArrayList<String> playerImageListAsString = imgIntent.getStringArrayListExtra("image_list");
 
-
-        for (String playerName: playerListAsString) {
-
-            for(String playerImage: playerImageListAsString)
-            {
-                Player playerToAdd = new Player(playerName, new ArrayList<>(), playerImage);
-                playerList.add(playerToAdd);
-            }
+        for (int i = 0, j = 0; i < playerListAsString.size() && j < playerImageListAsString.size(); i++, j++) {
+            Player playerToAdd = new Player(playerListAsString.get(i), new ArrayList<>(), playerImageListAsString.get(j));
+            playerList.add(playerToAdd);
         }
 
         deckToShuffle = new ArrayList<>();
         deck = new LinkedList<>();
-        Log.d("CREATION", "playerImageList:" + playerImageList.toString());
         Log.d("CREATION", "player list: " + playerList.toString());
 
         cardSym = findViewById(R.id.card_symbol);
@@ -175,32 +165,36 @@ public class TheGame extends AppCompatActivity {
         showPlayerInfo(playerList.get(currentPlayerIndex));
     }
 
-    private void showPlayerInfo(Player player){
+    private void showPlayerInfo(Player player) {
         playerName.setText(player.getName());
         byte[] decodedBytes = Base64.decode(player.getImage(), Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
         imgPlayer.setImageBitmap(bitmap);
 
+        Log.d("Testing1", "players: " + player.getName());
+        Log.d("Testing2", "players: " + player.getImage());
+        Log.d("Testing3", "player list: " + playerList.toString());
 
         ArrayList<Card> cards = player.getInventory().stream()
-                .filter(card ->  card.getCardSymbol() != null && !card.getCardSymbol().isEmpty())
+                .filter(card -> card.getCardSymbol() != null && !card.getCardSymbol().isEmpty())
                 .collect(Collectors.toCollection(ArrayList::new));
 
         ListAdapter adapter = new CustomAdapter(getApplicationContext(),
-                android.R.layout.simple_list_item_1,cards, player);
+                android.R.layout.simple_list_item_1, cards, player);
 
         final int adapterCount = adapter.getCount();
 
         for (int i = 0; i < adapterCount; i++) {
             View item = adapter.getView(i, null, null);
             inventory.addView(item);
-        LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-        inventory.removeAllViews();
-        for (Card card : player.getInventory()) {
-            Button btn = new Button(this);
-            btn.setText(card.getCardSymbol() + "\n" + card.getText());
-            btn.setLayoutParams(lparams);
-            inventory.addView(btn);
+            LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            inventory.removeAllViews();
+            for (Card card : player.getInventory()) {
+                Button btn = new Button(this);
+                btn.setText(card.getCardSymbol() + "\n" + card.getText());
+                btn.setLayoutParams(lparams);
+                inventory.addView(btn);
+            }
         }
     }
 
@@ -231,6 +225,8 @@ public class TheGame extends AppCompatActivity {
     private void imageToString(Bitmap bitmap) {
         String encodedImage = encodeToBase64(bitmap, Bitmap.CompressFormat.PNG, 100);
         player.setImage(encodedImage);
+    }
+
     public void addToInventory(Card cardToAdd){
         Player player = playerList.get(currentPlayerIndex);
         player.addToInventory(cardToAdd);
