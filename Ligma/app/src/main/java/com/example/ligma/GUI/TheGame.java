@@ -180,6 +180,13 @@ public class TheGame extends AppCompatActivity {
         inventory.removeAllViews();
         for (Card card : player.getInventory()) {
             Button btn = new Button(this);
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    inventory.removeView(v);
+                    player.removeFromInventory(card);
+                }
+            });
             btn.setText(card.getCardSymbol() + "\n" + card.getText());
             btn.setLayoutParams(lparams);
             inventory.addView(btn);
