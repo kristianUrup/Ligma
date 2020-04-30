@@ -2,24 +2,26 @@ package com.example.ligma.BE;
 
 public class Card {
     private  String cardSymbol;
-    private int id;
+    private String id;
     private CardType cardType;
     private String text;
     private String effectExplanation;
 
-    public Card(int id, CardType cardType, String text) {
+    public Card(){}
+
+    public Card(String id, CardType cardType, String text) {
         this.id = id;
         this.cardType = cardType;
         this.text = text;
     }
 
-    public Card(int id, CardType cardType, String text, String effectExplanation) {
+    public Card(String id, CardType cardType, String text, String effectExplanation) {
         this.id  = id;
         this.cardType = cardType;
         this.text = text;
         this.effectExplanation = effectExplanation;
     }
-    public Card(int id, CardType cardType, String text, String effectExplanation, String cardSymbol) {
+    public Card(String id, CardType cardType, String text, String effectExplanation, String cardSymbol) {
         this.id  = id;
         this.cardType = cardType;
         this.text = text;
@@ -27,7 +29,7 @@ public class Card {
         this.cardSymbol = cardSymbol;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
