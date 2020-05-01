@@ -65,10 +65,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
+            android:layout_marginLeft="30dp"
             android:layout_marginTop="25dp"
             android:layout_marginEnd="30dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"/>
+            android:layout_marginRight="30dp"
+            android:includeFontPadding="false"
+            android:textSize="16sp"
+            android:textStyle="bold" />
     </FrameLayout>
 
     <TextView
@@ -97,5 +100,20 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal" />
     </HorizontalScrollView>
+
+    <ImageView
+        android:id="@+id/imgPlayer"
+        android:layout_width="72dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="37dp"
+        android:layout_marginBottom="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.451"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardLayout"
+        app:layout_constraintVertical_bias="0.391"
+        app:srcCompat="@drawable/defaultpicture" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

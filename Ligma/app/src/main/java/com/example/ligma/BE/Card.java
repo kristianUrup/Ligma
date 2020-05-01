@@ -22,6 +22,7 @@ public class Card {
         this.text = text;
         this.effectExplanation = effectExplanation;
     }
+
     public Card(String id, CardType cardType, FunctionType functionType, String text, String effectExplanation, String cardSymbol) {
         this.id  = id;
         this.cardType = cardType;

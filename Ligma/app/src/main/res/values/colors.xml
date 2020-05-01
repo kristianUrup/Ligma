@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#008577</color>
+    <color name="colorBailOut">#922223</color>
+    <color name="colorGiveOut">#922919</color>
+    <color name="colorSkip">#216910</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 </resources>

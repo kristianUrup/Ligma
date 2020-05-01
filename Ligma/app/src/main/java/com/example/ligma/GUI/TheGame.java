@@ -1,23 +1,28 @@
 package com.example.ligma.GUI;
 
+import androidx.annotation.ColorRes;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
-
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
-
-
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
@@ -37,7 +42,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 public class TheGame extends AppCompatActivity {
 
-    private static final String TAG = "TAG";
+    Player player;
+    public static final String TAG = "TAG";
     ArrayList<Card> deckToShuffle;
     Queue<Card> deck;
     TextView cardDesc;
@@ -45,7 +51,9 @@ public class TheGame extends AppCompatActivity {
     TextView cardExp;
     TextView cardType;
     LinearLayout inventory;
+    ArrayList<String> playerImageList;
     ArrayList<Player> playerList;
+    ImageView imgPlayer;
     TextView cardSym;
 
     FrameLayout cardLayout;
@@ -60,13 +68,18 @@ public class TheGame extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_the_game);
+
         playerList = new ArrayList<>();
+        playerImageList = new ArrayList<>();
 
         Intent intent = getIntent();
         ArrayList<String> playerListAsString = intent.getStringArrayListExtra("player_list");
 
-        for (String playerName: playerListAsString) {
-            Player playerToAdd = new Player(playerName, new ArrayList<>());
+        Intent imgIntent = getIntent();
+        ArrayList<String> playerImageListAsString = imgIntent.getStringArrayListExtra("image_list");
+
+        for (int i = 0, j = 0; i < playerListAsString.size() && j < playerImageListAsString.size(); i++, j++) {
+            Player playerToAdd = new Player(playerListAsString.get(i), new ArrayList<>(), playerImageListAsString.get(j));
             playerList.add(playerToAdd);
         }
 
@@ -81,7 +94,7 @@ public class TheGame extends AppCompatActivity {
         playerName = findViewById(R.id.player_name);
         inventory = findViewById(R.id.inventory_layout);
         cardLayout = findViewById(R.id.cardLayout);
-
+        imgPlayer = findViewById(R.id.imgPlayer);
         db = FirebaseFirestore.getInstance();
 
         cardLayout.setOnTouchListener(new OnSwipeTouchListener(this) {
@@ -126,6 +139,9 @@ public class TheGame extends AppCompatActivity {
         deckToShuffle.add(card6);
         deckToShuffle.add(card7);
 
+        /**
+         * Readcards doesn't work if there aren't any mock cards above it.
+         */
         readCards();
     }
 
@@ -170,23 +186,34 @@ public class TheGame extends AppCompatActivity {
         showPlayerInfo(playerList.get(currentPlayerIndex));
     }
 
-    private void showPlayerInfo(Player player){
+    private void showPlayerInfo(Player player) {
         playerName.setText(player.getName());
-
-        LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         inventory.removeAllViews();
         for (Card card : player.getInventory()) {
             Button btn = new Button(this);
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    inventory.removeView(v);
-                    player.removeFromInventory(card);
-                }
-            });
-            btn.setText(card.getCardSymbol() + "\n" + card.getText());
+
+            if(card.getCardSymbol() == "S"){
+                Drawable s = getDrawable(R.drawable.skip_text);
+                Drawable hotTub = getDrawable(R.drawable.ic_hot_tub_black_24dp);
+                btn.setCompoundDrawablesWithIntrinsicBounds(null, s,null, hotTub);
+            }
+            if(card.getCardSymbol() == "B"){
+                Drawable b = getDrawable(R.drawable.bail_out_text);
+                Drawable bailOutText = getDrawable(R.drawable.bail_out);
+                btn.setCompoundDrawablesWithIntrinsicBounds(null, b,null, bailOutText);
+            }
+            btn.setBackgroundResource(R.drawable.button_inventory);
             btn.setLayoutParams(lparams);
             inventory.addView(btn);
+
+            byte[] decodedBytes = Base64.decode(player.getImage(), Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+            imgPlayer.setImageBitmap(bitmap);
+
+            Log.d("Testing1", "players: " + player.getName());
+            Log.d("Testing2", "players: " + player.getImage());
+            Log.d("Testing3", "player list: " + playerList.toString());
         }
     }
 
@@ -208,6 +235,17 @@ public class TheGame extends AppCompatActivity {
         deckToShuffle.clear();
     }
 
+    public static String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality) {
+        ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
+        image.compress(compressFormat, quality, byteArrayOS);
+        return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
+    }
+
+    private void imageToString(Bitmap bitmap) {
+        String encodedImage = encodeToBase64(bitmap, Bitmap.CompressFormat.PNG, 100);
+        player.setImage(encodedImage);
+    }
+
     public void addToInventory(Card cardToAdd){
         Player player = playerList.get(currentPlayerIndex);
         player.addToInventory(cardToAdd);
@@ -217,7 +255,7 @@ public class TheGame extends AppCompatActivity {
         }
     }
 
-    public void readCards(){
+    private void readCards(){
         db.collection("cards")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
