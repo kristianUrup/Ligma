@@ -4,6 +4,9 @@ import androidx.annotation.ColorRes;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -101,13 +104,11 @@ public class TheGame extends AppCompatActivity {
             @Override
             public void onSwipeLeft() {
                 super.onSwipeLeft();
-                Toast.makeText(TheGame.this, "Swipe to the left", Toast.LENGTH_SHORT).show();
                 nextTurn();
             }
             @Override
             public void onSwipeRight() {
                 super.onSwipeRight();
-                Toast.makeText(TheGame.this, "Swipe to the right", Toast.LENGTH_SHORT).show();
                 nextTurn();
             }
         });
@@ -130,6 +131,7 @@ public class TheGame extends AppCompatActivity {
         Card card5 = new Card("5", CardType.CHALLENGE, "DUEL", "The current player challenge another player for a shot of vodka. The one who grims the most has to take two drinks");
         Card card6 = new Card("6", CardType.FUNCTION, FunctionType.NONE, "TOILET", "You are allowed to go to the toilet. You still have to do your turn", "T");
         Card card7 = new Card("7", CardType.FUNCTION, FunctionType.SKIP, "BAIL-OUT", "You are allowed to skip your current turn. Got a tough card? Skip it", "B");
+        Card card8 = new Card("8", CardType.FUNCTION, FunctionType.DOUBLE, "DOUBLE UP", "On your turn, double the amount of drinks/chugs on the card. Only works on cards with a defined amount!", "DU");
 
         deckToShuffle.add(card1);
         deckToShuffle.add(card2);
@@ -138,11 +140,11 @@ public class TheGame extends AppCompatActivity {
         deckToShuffle.add(card5);
         deckToShuffle.add(card6);
         deckToShuffle.add(card7);
-
+        deckToShuffle.add(card8);
         /**
          * Readcards doesn't work if there aren't any mock cards above it.
          */
-        readCards();
+        //readCards();
     }
 
     private void startGame() {
@@ -205,6 +207,12 @@ public class TheGame extends AppCompatActivity {
             }
             btn.setBackgroundResource(R.drawable.button_inventory);
             btn.setLayoutParams(lparams);
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showAlertBox(v, player, card);
+                }
+            });
             inventory.addView(btn);
 
             byte[] decodedBytes = Base64.decode(player.getImage(), Base64.DEFAULT);
@@ -274,4 +282,66 @@ public class TheGame extends AppCompatActivity {
                     }
                 });
     }
+
+    private void doCardFunction(FunctionType functionType) {
+        switch(functionType) {
+            case SKIP:
+                nextTurn();
+                break;
+            case DOUBLE:
+                int doubleValue = 2;
+
+                String expText = cardExp.getText().toString();
+                String descText = cardDesc.getText().toString();
+
+                cardDesc.setText(multiplyDrinkValue(descText, doubleValue));
+                cardExp.setText(multiplyDrinkValue(expText, doubleValue));
+                break;
+        }
+    }
+
+    private String multiplyDrinkValue(String text, int multiplyAmount) {
+        String newText = "";
+        for (int i = 0; i < text.length(); i++) {
+            char character = text.charAt(i);
+            if (Character.isDigit(character)) {
+                int number = Character.getNumericValue(character) * multiplyAmount;
+                newText = newText + number;
+            }else {
+                newText = newText + character;
+            }
+        }
+        return newText;
+    }
+
+    private void showAlertBox(View view, Player player, Card card) {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        inventory.removeView(view);
+                        player.removeFromInventory(card);
+                        doCardFunction(card.getFunctionType());
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                }
+            }
+        };
+
+        String alertMessage = "Card: " + card.getText()
+                + "\n"
+                + "\nEffect: " + card.getEffectExplanation()
+                + "\n"
+                + "\nOnce used it will be removed from your inventory!"
+                + "\n"
+                + "\nAre you sure you want to use this card?";
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(alertMessage).setPositiveButton("Yes!", dialogClickListener)
+                .setNegativeButton("No...", dialogClickListener).show();
+    }
+
 }
