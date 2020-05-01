@@ -84,7 +84,6 @@ public class TheGame extends AppCompatActivity {
 
         deckToShuffle = new ArrayList<>();
         deck = new LinkedList<>();
-        Log.d("CREATION", "player list: " + playerList.toString());
 
         cardSym = findViewById(R.id.card_symbol);
         cardDesc = findViewById(R.id.card_description);
@@ -143,6 +142,11 @@ public class TheGame extends AppCompatActivity {
          * Readcards doesn't work if there aren't any mock cards above it.
          */
         readCards();
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 
     private void startGame() {
@@ -210,10 +214,6 @@ public class TheGame extends AppCompatActivity {
             byte[] decodedBytes = Base64.decode(player.getImage(), Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
             imgPlayer.setImageBitmap(bitmap);
-
-            Log.d("Testing1", "players: " + player.getName());
-            Log.d("Testing2", "players: " + player.getImage());
-            Log.d("Testing3", "player list: " + playerList.toString());
         }
     }
 
