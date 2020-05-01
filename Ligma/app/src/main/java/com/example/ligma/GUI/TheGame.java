@@ -74,30 +74,13 @@ public class TheGame extends AppCompatActivity {
 
         playerList = new ArrayList<>();
         playerImageList = new ArrayList<>();
-
-        Intent intent = getIntent();
-        ArrayList<String> playerListAsString = intent.getStringArrayListExtra("player_list");
-
-        Intent imgIntent = getIntent();
-        ArrayList<String> playerImageListAsString = imgIntent.getStringArrayListExtra("image_list");
-
-        for (int i = 0, j = 0; i < playerListAsString.size() && j < playerImageListAsString.size(); i++, j++) {
-            Player playerToAdd = new Player(playerListAsString.get(i), new ArrayList<>(), playerImageListAsString.get(j));
-            playerList.add(playerToAdd);
-        }
-
         deckToShuffle = new ArrayList<>();
         deck = new LinkedList<>();
-        Log.d("CREATION", "player list: " + playerList.toString());
 
-        cardSym = findViewById(R.id.card_symbol);
-        cardDesc = findViewById(R.id.card_description);
-        cardExp = findViewById(R.id.cardExp);
-        cardType = findViewById(R.id.cardType);
-        playerName = findViewById(R.id.player_name);
-        inventory = findViewById(R.id.inventory_layout);
-        cardLayout = findViewById(R.id.cardLayout);
-        imgPlayer = findViewById(R.id.imgPlayer);
+        setPlayers();
+
+        initViews();
+
         db = FirebaseFirestore.getInstance();
 
         cardLayout.setOnTouchListener(new OnSwipeTouchListener(this) {
@@ -113,14 +96,32 @@ public class TheGame extends AppCompatActivity {
             }
         });
 
-        LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        TextView tvToInsert = new TextView(this);
-        tvToInsert.setLayoutParams(lparams);
-        this.inventory.addView(tvToInsert);
-
         startGame();
+    }
+
+    private void initViews() {
+        cardSym = findViewById(R.id.card_symbol);
+        cardDesc = findViewById(R.id.card_description);
+        cardExp = findViewById(R.id.cardExp);
+        cardType = findViewById(R.id.cardType);
+        playerName = findViewById(R.id.player_name);
+        inventory = findViewById(R.id.inventory_layout);
+        cardLayout = findViewById(R.id.cardLayout);
+        imgPlayer = findViewById(R.id.imgPlayer);
+    }
+
+    private void setPlayers() {
+        Intent intent = getIntent();
+        ArrayList<String> playerListAsString = intent.getStringArrayListExtra("player_list");
+
+        Intent imgIntent = getIntent();
+        ArrayList<String> playerImageListAsString = imgIntent.getStringArrayListExtra("image_list");
+
+        for (int i = 0, j = 0; i < playerListAsString.size() && j < playerImageListAsString.size(); i++, j++) {
+            Player playerToAdd = new Player(playerListAsString.get(i), new ArrayList<>(), playerImageListAsString.get(j));
+            playerList.add(playerToAdd);
+        }
+        Log.d("CREATION", "player list: " + playerList.toString());
     }
 
     private void initDeck() {
