@@ -1,7 +1,5 @@
 package com.example.ligma.GUI;
 
-import androidx.annotation.ColorRes;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,31 +8,25 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.example.ligma.BE.Card;
 import com.example.ligma.BE.FunctionType;
 import com.example.ligma.BE.Player;
 import com.example.ligma.BE.CardType;
-import com.example.ligma.LOGIC.CustomAdapter;
 import com.example.ligma.LOGIC.OnSwipeTouchListener;
 import com.example.ligma.R;
 import com.google.android.gms.tasks.OnCompleteListener;
