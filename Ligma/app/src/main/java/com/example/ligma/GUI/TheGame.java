@@ -45,7 +45,6 @@ public class TheGame extends AppCompatActivity {
     TextView cardExp;
     TextView cardType;
     LinearLayout inventory;
-    ArrayList<String> playerImageList;
     ArrayList<Player> playerList;
     ImageView imgPlayer;
     TextView cardSym;
@@ -63,7 +62,6 @@ public class TheGame extends AppCompatActivity {
         setContentView(R.layout.activity_the_game);
 
         playerList = new ArrayList<>();
-        playerImageList = new ArrayList<>();
         deckToShuffle = new ArrayList<>();
         deck = new LinkedList<>();
         cardSym = findViewById(R.id.card_symbol);
@@ -117,7 +115,6 @@ public class TheGame extends AppCompatActivity {
             Player playerToAdd = new Player(playerListAsString.get(i), new ArrayList<>(), playerImageListAsString.get(j));
             playerList.add(playerToAdd);
         }
-        Log.d("CREATION", "player list: " + playerList.toString());
     }
 
     private void initDeck() {
@@ -207,10 +204,10 @@ public class TheGame extends AppCompatActivity {
             });
             inventory.addView(btn);
 
-            byte[] decodedBytes = Base64.decode(player.getImage(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-            imgPlayer.setImageBitmap(bitmap);
         }
+        byte[] decodedBytes = Base64.decode(player.getImage(), Base64.DEFAULT);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+        imgPlayer.setImageBitmap(bitmap);
     }
 
     private void shuffleDeck() {

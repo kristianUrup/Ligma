@@ -85,7 +85,6 @@ public class PlayerSelection extends Activity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP) {
             if (resultCode == RESULT_OK) {
                 Bundle extras = data.getExtras();
@@ -153,10 +152,6 @@ public class PlayerSelection extends Activity {
                         if (!TextUtils.isEmpty(editText.getText().toString())) {
                             addToListView();
                             txtTip.setVisibility(View.INVISIBLE);
-                            images.add(imgCameraString);
-                            imgCameraString = imgDefaultString;
-
-
                         }
                         if (listView.getCount() > 1) {
                             AddBtn.setVisibility(View.VISIBLE);
@@ -173,14 +168,20 @@ public class PlayerSelection extends Activity {
 
 
     private void addToListView(){
-        String names = editText.getText().toString();
         AddNewPlayer.setVisibility(View.VISIBLE);
+
+        String names = editText.getText().toString();
         list.add(names);
+
+        images.add(imgCameraString);
+
+        imgCameraString = imgDefaultString;
+        imgCamera.setImageResource(R.drawable.defaultpicture);
+
         listView.setAdapter(arrayAdapter);
         arrayAdapter.notifyDataSetChanged();
         errorText.setText("");
         editText.setText("");
-        imgCamera.setImageResource(R.drawable.defaultpicture);
     }
 
     public void onClickStart(View view){
