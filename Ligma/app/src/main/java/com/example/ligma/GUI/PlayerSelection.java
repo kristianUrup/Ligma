@@ -156,6 +156,7 @@ public class PlayerSelection extends Activity {
                             images.add(imgCameraString);
                             imgCameraString = imgDefaultString;
 
+
                         }
                         if (listView.getCount() > 1) {
                             AddBtn.setVisibility(View.VISIBLE);
@@ -179,6 +180,7 @@ public class PlayerSelection extends Activity {
         arrayAdapter.notifyDataSetChanged();
         errorText.setText("");
         editText.setText("");
+        imgCamera.setImageResource(R.drawable.defaultpicture);
     }
 
     public void onClickStart(View view){
