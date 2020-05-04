@@ -1,6 +1,9 @@
 package com.example.ligma.GUI;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,6 +16,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
+
+import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -20,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.ligma.BE.Card;
+import com.example.ligma.BE.FunctionType;
 import com.example.ligma.BE.Player;
 import com.example.ligma.BE.CardType;
 import com.example.ligma.DAL.CardDAO;
@@ -57,7 +63,49 @@ public class TheGame extends AppCompatActivity {
 
         playerList = new ArrayList<>();
         playerImageList = new ArrayList<>();
+        deckToShuffle = new ArrayList<>();
+        deck = new LinkedList<>();
+        cardSym = findViewById(R.id.card_symbol);
+        cardDesc = findViewById(R.id.card_description);
+        cardExp = findViewById(R.id.cardExp);
+        cardType = findViewById(R.id.cardType);
+        playerName = findViewById(R.id.player_name);
+        inventory = findViewById(R.id.inventory_layout);
+        cardLayout = findViewById(R.id.cardLayout);
+        imgPlayer = findViewById(R.id.imgPlayer);
+        cDAO = new CardDAO();
+        setPlayers();
 
+        initViews();
+
+        cardLayout.setOnTouchListener(new OnSwipeTouchListener(this) {
+            @Override
+            public void onSwipeLeft() {
+                super.onSwipeLeft();
+                nextTurn();
+            }
+            @Override
+            public void onSwipeRight() {
+                super.onSwipeRight();
+                nextTurn();
+            }
+        });
+
+        startGame();
+    }
+
+    private void initViews() {
+        cardSym = findViewById(R.id.card_symbol);
+        cardDesc = findViewById(R.id.card_description);
+        cardExp = findViewById(R.id.cardExp);
+        cardType = findViewById(R.id.cardType);
+        playerName = findViewById(R.id.player_name);
+        inventory = findViewById(R.id.inventory_layout);
+        cardLayout = findViewById(R.id.cardLayout);
+        imgPlayer = findViewById(R.id.imgPlayer);
+    }
+
+    private void setPlayers() {
         Intent intent = getIntent();
         ArrayList<String> playerListAsString = intent.getStringArrayListExtra("player_list");
 
@@ -68,43 +116,7 @@ public class TheGame extends AppCompatActivity {
             Player playerToAdd = new Player(playerListAsString.get(i), new ArrayList<>(), playerImageListAsString.get(j));
             playerList.add(playerToAdd);
         }
-
-        deckToShuffle = new ArrayList<>();
-        deck = new LinkedList<>();
-
-        cardSym = findViewById(R.id.card_symbol);
-        cardDesc = findViewById(R.id.card_description);
-        cardExp = findViewById(R.id.cardExp);
-        cardType = findViewById(R.id.cardType);
-        playerName = findViewById(R.id.player_name);
-        inventory = findViewById(R.id.inventory_layout);
-        cardLayout = findViewById(R.id.cardLayout);
-        imgPlayer = findViewById(R.id.imgPlayer);
-        cDAO = new CardDAO();
-
-        cardLayout.setOnTouchListener(new OnSwipeTouchListener(this) {
-            @Override
-            public void onSwipeLeft() {
-                super.onSwipeLeft();
-                Toast.makeText(TheGame.this, "Swipe to the left", Toast.LENGTH_SHORT).show();
-                nextTurn();
-            }
-            @Override
-            public void onSwipeRight() {
-                super.onSwipeRight();
-                Toast.makeText(TheGame.this, "Swipe to the right", Toast.LENGTH_SHORT).show();
-                nextTurn();
-            }
-        });
-
-        LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        TextView tvToInsert = new TextView(this);
-        tvToInsert.setLayoutParams(lparams);
-        this.inventory.addView(tvToInsert);
-
-        startGame();
+        Log.d("CREATION", "player list: " + playerList.toString());
     }
 
     private void initDeck() {
@@ -116,7 +128,6 @@ public class TheGame extends AppCompatActivity {
                 setCurrentRoundInfo();
             }
         });
-        Log.d(TAG, "initDeck: " + deckToShuffle.toString());
     }
 
     @Override
@@ -182,6 +193,12 @@ public class TheGame extends AppCompatActivity {
             }
             btn.setBackgroundResource(R.drawable.button_inventory);
             btn.setLayoutParams(lparams);
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showAlertBox(v, player, card);
+                }
+            });
             inventory.addView(btn);
 
             byte[] decodedBytes = Base64.decode(player.getImage(), Base64.DEFAULT);
@@ -226,5 +243,66 @@ public class TheGame extends AppCompatActivity {
         for (Card card : player.getInventory()) {
             Log.d(TAG, "Card in inventory: " + card.getText());
         }
+    }
+
+    private void doCardFunction(FunctionType functionType) {
+        switch(functionType) {
+            case SKIP:
+                nextTurn();
+                break;
+            case DOUBLE:
+                int doubleValue = 2;
+
+                String expText = cardExp.getText().toString();
+                String descText = cardDesc.getText().toString();
+
+                cardDesc.setText(multiplyDrinkValue(descText, doubleValue));
+                cardExp.setText(multiplyDrinkValue(expText, doubleValue));
+                break;
+        }
+    }
+
+    private String multiplyDrinkValue(String text, int multiplyAmount) {
+        String newText = "";
+        for (int i = 0; i < text.length(); i++) {
+            char character = text.charAt(i);
+            if (Character.isDigit(character)) {
+                int number = Character.getNumericValue(character) * multiplyAmount;
+                newText = newText + number;
+            }else {
+                newText = newText + character;
+            }
+        }
+        return newText;
+    }
+
+    private void showAlertBox(View view, Player player, Card card) {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        inventory.removeView(view);
+                        player.removeFromInventory(card);
+                        doCardFunction(card.getFunctionType());
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                }
+            }
+        };
+
+        String alertMessage = "Card: " + card.getText()
+                + "\n"
+                + "\nEffect: " + card.getEffectExplanation()
+                + "\n"
+                + "\nOnce used it will be removed from your inventory!"
+                + "\n"
+                + "\nAre you sure you want to use this card?";
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(alertMessage).setPositiveButton("Yes!", dialogClickListener)
+                .setNegativeButton("No...", dialogClickListener).show();
     }
 }

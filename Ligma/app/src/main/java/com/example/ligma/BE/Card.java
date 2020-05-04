@@ -4,6 +4,7 @@ public class Card {
     private  String cardSymbol;
     private String id;
     private CardType cardType;
+    private FunctionType functionType;
     private String text;
     private String effectExplanation;
 
@@ -21,9 +22,11 @@ public class Card {
         this.text = text;
         this.effectExplanation = effectExplanation;
     }
-    public Card(String id, CardType cardType, String text, String effectExplanation, String cardSymbol) {
+
+    public Card(String id, CardType cardType, FunctionType functionType, String text, String effectExplanation, String cardSymbol) {
         this.id  = id;
         this.cardType = cardType;
+        this.functionType = functionType;
         this.text = text;
         this.effectExplanation = effectExplanation;
         this.cardSymbol = cardSymbol;
@@ -32,6 +35,8 @@ public class Card {
     public String getId() {
         return id;
     }
+
+    public void setId(String id) { this.id = id; }
 
     public CardType getCardType() {
         return cardType;
@@ -53,11 +58,13 @@ public class Card {
         return effectExplanation;
     }
 
-    public void setEffectExplanation(String effectExplanation) {
-        this.effectExplanation = effectExplanation;
-    }
+    public void setEffectExplanation(String effectExplanation) { this.effectExplanation = effectExplanation; }
 
     public String getCardSymbol() {return cardSymbol; }
 
     public void setCardSymbol(String cardSymbol) { this.cardSymbol = cardSymbol; }
+
+    public FunctionType getFunctionType() { return functionType; }
+
+    public void setFunctionType(FunctionType functionType) { this.functionType = functionType; }
 }
