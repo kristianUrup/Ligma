@@ -4,6 +4,9 @@ import androidx.annotation.ColorRes;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -28,6 +31,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.ligma.BE.Card;
+import com.example.ligma.BE.FunctionType;
 import com.example.ligma.BE.Player;
 import com.example.ligma.BE.CardType;
 import com.example.ligma.LOGIC.CustomAdapter;
@@ -70,7 +74,43 @@ public class TheGame extends AppCompatActivity {
 
         playerList = new ArrayList<>();
         playerImageList = new ArrayList<>();
+        deckToShuffle = new ArrayList<>();
+        deck = new LinkedList<>();
 
+        setPlayers();
+
+        initViews();
+
+        db = FirebaseFirestore.getInstance();
+
+        cardLayout.setOnTouchListener(new OnSwipeTouchListener(this) {
+            @Override
+            public void onSwipeLeft() {
+                super.onSwipeLeft();
+                nextTurn();
+            }
+            @Override
+            public void onSwipeRight() {
+                super.onSwipeRight();
+                nextTurn();
+            }
+        });
+
+        startGame();
+    }
+
+    private void initViews() {
+        cardSym = findViewById(R.id.card_symbol);
+        cardDesc = findViewById(R.id.card_description);
+        cardExp = findViewById(R.id.cardExp);
+        cardType = findViewById(R.id.cardType);
+        playerName = findViewById(R.id.player_name);
+        inventory = findViewById(R.id.inventory_layout);
+        cardLayout = findViewById(R.id.cardLayout);
+        imgPlayer = findViewById(R.id.imgPlayer);
+    }
+
+    private void setPlayers() {
         Intent intent = getIntent();
         ArrayList<String> playerListAsString = intent.getStringArrayListExtra("player_list");
 
@@ -81,43 +121,7 @@ public class TheGame extends AppCompatActivity {
             Player playerToAdd = new Player(playerListAsString.get(i), new ArrayList<>(), playerImageListAsString.get(j));
             playerList.add(playerToAdd);
         }
-
-        deckToShuffle = new ArrayList<>();
-        deck = new LinkedList<>();
-
-        cardSym = findViewById(R.id.card_symbol);
-        cardDesc = findViewById(R.id.card_description);
-        cardExp = findViewById(R.id.cardExp);
-        cardType = findViewById(R.id.cardType);
-        playerName = findViewById(R.id.player_name);
-        inventory = findViewById(R.id.inventory_layout);
-        cardLayout = findViewById(R.id.cardLayout);
-        imgPlayer = findViewById(R.id.imgPlayer);
-        db = FirebaseFirestore.getInstance();
-
-        cardLayout.setOnTouchListener(new OnSwipeTouchListener(this) {
-            @Override
-            public void onSwipeLeft() {
-                super.onSwipeLeft();
-                Toast.makeText(TheGame.this, "Swipe to the left", Toast.LENGTH_SHORT).show();
-                nextTurn();
-            }
-            @Override
-            public void onSwipeRight() {
-                super.onSwipeRight();
-                Toast.makeText(TheGame.this, "Swipe to the right", Toast.LENGTH_SHORT).show();
-                nextTurn();
-            }
-        });
-
-        LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        TextView tvToInsert = new TextView(this);
-        tvToInsert.setLayoutParams(lparams);
-        this.inventory.addView(tvToInsert);
-
-        startGame();
+        Log.d("CREATION", "player list: " + playerList.toString());
     }
 
     private void initDeck() {
@@ -126,8 +130,9 @@ public class TheGame extends AppCompatActivity {
         Card card3 = new Card("3", CardType.DRINK, "You and the person to your right both take 2 drinks");
         Card card4 = new Card("4", CardType.DRINK, "Take 3 drinks. The person to your left takes double that");
         Card card5 = new Card("5", CardType.CHALLENGE, "DUEL", "The current player challenge another player for a shot of vodka. The one who grims the most has to take two drinks");
-        Card card6 = new Card("6", CardType.FUNCTION, "SKIP", "You can skip a round", "S");
-        Card card7 = new Card("7", CardType.FUNCTION, "BAILOUT", "You can bailout", "B");
+        Card card6 = new Card("6", CardType.FUNCTION, FunctionType.NONE, "TOILET", "You are allowed to go to the toilet. You still have to do your turn", "T");
+        Card card7 = new Card("7", CardType.FUNCTION, FunctionType.SKIP, "BAIL-OUT", "You are allowed to skip your current turn. Got a tough card? Skip it", "B");
+        Card card8 = new Card("8", CardType.FUNCTION, FunctionType.DOUBLE, "DOUBLE UP", "On your turn, double the amount of drinks/chugs on the card. Only works on cards with a defined amount!", "DU");
 
         deckToShuffle.add(card1);
         deckToShuffle.add(card2);
@@ -136,12 +141,11 @@ public class TheGame extends AppCompatActivity {
         deckToShuffle.add(card5);
         deckToShuffle.add(card6);
         deckToShuffle.add(card7);
-
-
+        deckToShuffle.add(card8);
         /**
          * Readcards doesn't work if there aren't any mock cards above it.
          */
-        readCards();
+        //readCards();
     }
 
     @Override
@@ -209,6 +213,12 @@ public class TheGame extends AppCompatActivity {
             }
             btn.setBackgroundResource(R.drawable.button_inventory);
             btn.setLayoutParams(lparams);
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showAlertBox(v, player, card);
+                }
+            });
             inventory.addView(btn);
 
             byte[] decodedBytes = Base64.decode(player.getImage(), Base64.DEFAULT);
@@ -263,6 +273,8 @@ public class TheGame extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()) {
                             for(QueryDocumentSnapshot document : task.getResult()){
+                                Card card = document.toObject(Card.class);
+                                card.setId(document.getId());
                                 deckToShuffle.add(document.toObject(Card.class));
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                             }
@@ -272,4 +284,66 @@ public class TheGame extends AppCompatActivity {
                     }
                 });
     }
+
+    private void doCardFunction(FunctionType functionType) {
+        switch(functionType) {
+            case SKIP:
+                nextTurn();
+                break;
+            case DOUBLE:
+                int doubleValue = 2;
+
+                String expText = cardExp.getText().toString();
+                String descText = cardDesc.getText().toString();
+
+                cardDesc.setText(multiplyDrinkValue(descText, doubleValue));
+                cardExp.setText(multiplyDrinkValue(expText, doubleValue));
+                break;
+        }
+    }
+
+    private String multiplyDrinkValue(String text, int multiplyAmount) {
+        String newText = "";
+        for (int i = 0; i < text.length(); i++) {
+            char character = text.charAt(i);
+            if (Character.isDigit(character)) {
+                int number = Character.getNumericValue(character) * multiplyAmount;
+                newText = newText + number;
+            }else {
+                newText = newText + character;
+            }
+        }
+        return newText;
+    }
+
+    private void showAlertBox(View view, Player player, Card card) {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        inventory.removeView(view);
+                        player.removeFromInventory(card);
+                        doCardFunction(card.getFunctionType());
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                }
+            }
+        };
+
+        String alertMessage = "Card: " + card.getText()
+                + "\n"
+                + "\nEffect: " + card.getEffectExplanation()
+                + "\n"
+                + "\nOnce used it will be removed from your inventory!"
+                + "\n"
+                + "\nAre you sure you want to use this card?";
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(alertMessage).setPositiveButton("Yes!", dialogClickListener)
+                .setNegativeButton("No...", dialogClickListener).show();
+    }
+
 }
