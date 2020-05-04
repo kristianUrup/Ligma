@@ -1,5 +1,5 @@
 package com.example.ligma.GUI;
-
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -23,7 +23,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.example.ligma.BE.Card;
 import com.example.ligma.BE.FunctionType;
 import com.example.ligma.BE.Player;
