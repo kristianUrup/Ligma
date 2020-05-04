@@ -1,43 +1,31 @@
 package com.example.ligma.GUI;
 
-import androidx.annotation.ColorRes;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.ligma.BE.Card;
 import com.example.ligma.BE.Player;
 import com.example.ligma.BE.CardType;
-import com.example.ligma.LOGIC.CustomAdapter;
+import com.example.ligma.DAL.CardDAO;
+import com.example.ligma.DAL.FirestoreCallback;
 import com.example.ligma.LOGIC.OnSwipeTouchListener;
 import com.example.ligma.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 public class TheGame extends AppCompatActivity {
 
@@ -59,8 +47,7 @@ public class TheGame extends AppCompatActivity {
 
     private int currentPlayerIndex = 0;
 
-
-    FirebaseFirestore db;
+    CardDAO cDAO;
 
 
     @Override
@@ -93,7 +80,7 @@ public class TheGame extends AppCompatActivity {
         inventory = findViewById(R.id.inventory_layout);
         cardLayout = findViewById(R.id.cardLayout);
         imgPlayer = findViewById(R.id.imgPlayer);
-        db = FirebaseFirestore.getInstance();
+        cDAO = new CardDAO();
 
         cardLayout.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
@@ -121,27 +108,15 @@ public class TheGame extends AppCompatActivity {
     }
 
     private void initDeck() {
-        Card card1 = new Card("1", CardType.DRINK, "Take 2 drinks");
-        Card card2 = new Card("2", CardType.DRINK, "Give 4 drinks out among the other players");
-        Card card3 = new Card("3", CardType.DRINK, "You and the person to your right both take 2 drinks");
-        Card card4 = new Card("4", CardType.DRINK, "Take 3 drinks. The person to your left takes double that");
-        Card card5 = new Card("5", CardType.CHALLENGE, "DUEL", "The current player challenge another player for a shot of vodka. The one who grims the most has to take two drinks");
-        Card card6 = new Card("6", CardType.FUNCTION, "SKIP", "You can skip a round", "S");
-        Card card7 = new Card("7", CardType.FUNCTION, "BAILOUT", "You can bailout", "B");
-
-        deckToShuffle.add(card1);
-        deckToShuffle.add(card2);
-        deckToShuffle.add(card3);
-        deckToShuffle.add(card4);
-        deckToShuffle.add(card5);
-        deckToShuffle.add(card6);
-        deckToShuffle.add(card7);
-
-
-        /**
-         * Readcards doesn't work if there aren't any mock cards above it.
-         */
-        readCards();
+        cDAO.readCards(new FirestoreCallback() {
+            @Override
+            public void onCallBack(ArrayList<Card> deck) {
+                deckToShuffle = deck;
+                shuffleDeck();
+                setCurrentRoundInfo();
+            }
+        });
+        Log.d(TAG, "initDeck: " + deckToShuffle.toString());
     }
 
     @Override
@@ -151,8 +126,6 @@ public class TheGame extends AppCompatActivity {
 
     private void startGame() {
         initDeck();
-        shuffleDeck();
-        setCurrentRoundInfo();
     }
 
     private void nextTurn() {
@@ -253,23 +226,5 @@ public class TheGame extends AppCompatActivity {
         for (Card card : player.getInventory()) {
             Log.d(TAG, "Card in inventory: " + card.getText());
         }
-    }
-
-    private void readCards(){
-        db.collection("cards")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()) {
-                            for(QueryDocumentSnapshot document : task.getResult()){
-                                deckToShuffle.add(document.toObject(Card.class));
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.w(TAG, "Reading documents resulted in error.", task.getException());
-                        }
-                    }
-                });
     }
 }
