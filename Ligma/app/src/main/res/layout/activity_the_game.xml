@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".GUI.TheGame">
 
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/loadingIcon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/spinner"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.237" />
+
     <FrameLayout
         android:id="@+id/cardLayout"
         android:layout_width="336dp"
@@ -14,20 +28,22 @@
         android:layout_marginTop="50dp"
         android:layout_marginEnd="30dp"
         android:background="@drawable/card_border"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
 
         <TextView
             android:id="@+id/cardExp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:layout_marginBottom="50dp"
             android:gravity="center"
             android:text="TextView"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
             android:textAlignment="center"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -37,13 +53,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|center_horizontal"
+            android:layout_marginLeft="30dp"
             android:layout_marginTop="30dp"
+            android:layout_marginRight="30dp"
             android:gravity="center"
             android:text="TextView"
             android:textAlignment="center"
             android:textSize="24sp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
             android:textStyle="bold" />
 
         <TextView
@@ -51,12 +67,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:gravity="center"
             android:text="TextView"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -87,6 +103,7 @@
         app:layout_constraintTop_toBottomOf="@+id/cardLayout" />
 
     <HorizontalScrollView
+        android:id="@+id/horizontalScrollView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"

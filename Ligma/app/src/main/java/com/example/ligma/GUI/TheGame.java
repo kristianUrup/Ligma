@@ -23,6 +23,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.ligma.BE.Card;
 import com.example.ligma.BE.FunctionType;
 import com.example.ligma.BE.Player;
@@ -119,9 +121,14 @@ public class TheGame extends AppCompatActivity {
     }
 
     private void initDeck() {
+        if(deckToShuffle.isEmpty())
+        {
+            cardLayout.setVisibility(View.INVISIBLE);
+        }
         cDAO.readCards(new FirestoreCallback() {
             @Override
             public void onCallBack(ArrayList<Card> deck) {
+                cardLayout.setVisibility(View.VISIBLE);
                 deckToShuffle = deck;
                 shuffleDeck();
                 setCurrentRoundInfo();
