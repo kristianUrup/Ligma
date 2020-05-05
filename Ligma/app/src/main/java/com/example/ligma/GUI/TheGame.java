@@ -37,6 +37,8 @@ import com.example.ligma.DAL.FirestoreCallback;
 import com.example.ligma.LOGIC.OnSwipeTouchListener;
 import com.example.ligma.R;
 
+import pl.droidsonroids.gif.GifImageView;
+
 public class TheGame extends AppCompatActivity {
 
     Player player;
@@ -48,6 +50,7 @@ public class TheGame extends AppCompatActivity {
     TextView cardExp;
     TextView cardType;
     LinearLayout inventory;
+    GifImageView loadingIcon;
     ArrayList<Player> playerList;
     ImageView imgPlayer;
     TextView cardSym;
@@ -125,11 +128,15 @@ public class TheGame extends AppCompatActivity {
         if(deckToShuffle.isEmpty())
         {
             cardLayout.setVisibility(View.INVISIBLE);
+            loadingIcon.setVisibility(View.VISIBLE);
+
+
         }
         cDAO.readCards(new FirestoreCallback() {
             @Override
             public void onCallBack(ArrayList<Card> deck) {
                 cardLayout.setVisibility(View.VISIBLE);
+                loadingIcon.setVisibility(View.INVISIBLE);
                 deckToShuffle = deck;
                 shuffleDeck();
                 setCurrentRoundInfo();
