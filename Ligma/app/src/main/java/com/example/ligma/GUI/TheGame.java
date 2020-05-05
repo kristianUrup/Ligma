@@ -59,7 +59,6 @@ public class TheGame extends AppCompatActivity {
     ImageView imgPlayer;
     TextView cardSym;
 
-
     FrameLayout cardLayout;
 
     private int currentPlayerIndex = 0;
