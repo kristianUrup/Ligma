@@ -12,28 +12,45 @@
         android:layout_width="120dp"
         android:layout_height="48dp"
         android:layout_marginStart="140dp"
-        android:layout_marginTop="110dp"
+        android:layout_marginTop="212dp"
         android:layout_marginEnd="140dp"
+        android:background="@drawable/button_shape"
         android:onClick="onClickStartGame"
         android:text="@string/New_Game"
+        android:textColor="@color/button_text"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/button_shape"
-        android:textColor="@color/button_text"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/rules"
         android:layout_width="120dp"
         android:layout_height="48dp"
         android:layout_marginStart="140dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="60dp"
         android:layout_marginEnd="140dp"
+        android:background="@drawable/button_shape"
         android:onClick="onClickRules"
         android:text="@string/rules"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/start_game"
         android:textColor="@color/button_text"
-        android:background="@drawable/button_shape" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.454"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/start_game" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="80dp"
+        app:layout_constraintBottom_toTopOf="@+id/start_game"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ligma" />
 </androidx.constraintlayout.widget.ConstraintLayout>

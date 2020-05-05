@@ -174,7 +174,6 @@ public class PlayerSelection extends Activity {
         }
     }
 
-
     private void addToListView(){
         AddNewPlayer.setVisibility(View.VISIBLE);
         String name = editText.getText().toString();
