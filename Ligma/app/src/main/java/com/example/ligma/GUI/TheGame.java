@@ -1,36 +1,42 @@
 package com.example.ligma.GUI;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.ligma.BE.Card;
+import com.example.ligma.BE.CardType;
+import com.example.ligma.BE.FunctionType;
+import com.example.ligma.BE.Player;
+import com.example.ligma.DAL.CardDAO;
+import com.example.ligma.DAL.FirestoreCallback;
+import com.example.ligma.LOGIC.OnSwipeTouchListener;
+import com.example.ligma.R;
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 
-import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import com.example.ligma.BE.Card;
-import com.example.ligma.BE.FunctionType;
-import com.example.ligma.BE.Player;
-import com.example.ligma.BE.CardType;
-import com.example.ligma.DAL.CardDAO;
-import com.example.ligma.DAL.FirestoreCallback;
-import com.example.ligma.LOGIC.OnSwipeTouchListener;
-import com.example.ligma.R;
+import pl.droidsonroids.gif.GifImageView;
 
 public class TheGame extends AppCompatActivity {
 
@@ -43,7 +49,7 @@ public class TheGame extends AppCompatActivity {
     TextView cardExp;
     TextView cardType;
     LinearLayout inventory;
-    ArrayList<String> playerImageList;
+    GifImageView loadingIcon;
     ArrayList<Player> playerList;
     ImageView imgPlayer;
     TextView cardSym;
@@ -62,10 +68,11 @@ public class TheGame extends AppCompatActivity {
         setContentView(R.layout.activity_the_game);
 
         playerList = new ArrayList<>();
-        playerImageList = new ArrayList<>();
         deckToShuffle = new ArrayList<>();
+
         deck = new LinkedList<>();
         cDAO = new CardDAO();
+
         setPlayers();
 
         initViews();
@@ -77,14 +84,15 @@ public class TheGame extends AppCompatActivity {
             @Override
             public void onSwipeLeft() {
                 super.onSwipeLeft();
-                nextTurn();
-            }
-            @Override
-            public void onSwipeRight() {
-                super.onSwipeRight();
+
+                Animation swipe = AnimationUtils.loadAnimation(TheGame.this,R.anim.lefttoright);
+                cardLayout.startAnimation(swipe);
                 nextTurn();
             }
         });
+
+        cardExp.setAutoSizeTextTypeUniformWithConfiguration(
+                1, 17, 1, TypedValue.COMPLEX_UNIT_DIP);
 
         startGame();
     }
@@ -98,16 +106,26 @@ public class TheGame extends AppCompatActivity {
         inventory = findViewById(R.id.inventory_layout);
         cardLayout = findViewById(R.id.cardLayout);
         imgPlayer = findViewById(R.id.imgPlayer);
+        cardLayout = findViewById(R.id.cardLayout);
+        loadingIcon = findViewById(R.id.loadingIcon);
     }
 
     private void setPlayers() {
-        Log.d("CREATION", "player list: " + playerList.toString());
     }
 
     private void initDeck() {
+        if(deckToShuffle.isEmpty())
+        {
+            cardLayout.setVisibility(View.INVISIBLE);
+            loadingIcon.setVisibility(View.VISIBLE);
+
+
+        }
         cDAO.readCards(new FirestoreCallback() {
             @Override
             public void onCallBack(ArrayList<Card> deck) {
+                cardLayout.setVisibility(View.VISIBLE);
+                loadingIcon.setVisibility(View.INVISIBLE);
                 deckToShuffle = deck;
                 shuffleDeck();
                 setCurrentRoundInfo();
@@ -117,7 +135,7 @@ public class TheGame extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
+        Toast.makeText(this, "Going back is not an option", Toast.LENGTH_SHORT).show();
     }
 
     private void startGame() {
@@ -144,7 +162,7 @@ public class TheGame extends AppCompatActivity {
         cardType.setText(startingCard.getCardType().name());
         cardDesc.setText(startingCard.getText());
 
-        if (startingCard.getCardType() != CardType.DRINK) {
+        if (startingCard.getCardType() != null) {
             cardExp.setText(startingCard.getEffectExplanation());
         }else {
             cardExp.setText("");
@@ -186,10 +204,10 @@ public class TheGame extends AppCompatActivity {
             });
             inventory.addView(btn);
 
-            byte[] decodedBytes = Base64.decode(player.getImage(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-            imgPlayer.setImageBitmap(bitmap);
         }
+        byte[] decodedBytes = Base64.decode(player.getImage(), Base64.DEFAULT);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+        imgPlayer.setImageBitmap(bitmap);
     }
 
     private void shuffleDeck() {
