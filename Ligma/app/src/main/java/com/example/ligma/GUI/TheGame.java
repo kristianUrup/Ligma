@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Base64;
@@ -18,6 +20,7 @@ import java.util.Queue;
 import java.util.Random;
 
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -25,6 +28,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +54,7 @@ public class TheGame extends AppCompatActivity {
     TextView cardExp;
     TextView cardType;
     LinearLayout inventory;
+    LinearLayout statutes;
     GifImageView loadingIcon;
     ArrayList<Player> playerList;
     ImageView imgPlayer;
@@ -101,6 +106,7 @@ public class TheGame extends AppCompatActivity {
         cardType = findViewById(R.id.cardType);
         playerName = findViewById(R.id.player_name);
         inventory = findViewById(R.id.inventory_layout);
+        statutes = findViewById(R.id.status_layout);
         cardLayout = findViewById(R.id.cardLayout);
         imgPlayer = findViewById(R.id.imgPlayer);
         cardLayout = findViewById(R.id.cardLayout);
@@ -125,7 +131,7 @@ public class TheGame extends AppCompatActivity {
         {
             cardLayout.setVisibility(View.INVISIBLE);
             loadingIcon.setVisibility(View.VISIBLE);
-
+            imgPlayer.setVisibility(View.INVISIBLE);
 
         }
         cDAO.readCards(new FirestoreCallback() {
@@ -133,6 +139,7 @@ public class TheGame extends AppCompatActivity {
             public void onCallBack(ArrayList<Card> deck) {
                 cardLayout.setVisibility(View.VISIBLE);
                 loadingIcon.setVisibility(View.INVISIBLE);
+                imgPlayer.setVisibility(View.VISIBLE);
                 deckToShuffle = deck;
                 shuffleDeck();
                 setCurrentRoundInfo();
@@ -175,46 +182,67 @@ public class TheGame extends AppCompatActivity {
             cardExp.setText("");
         }
 
-        if(startingCard.getCardType()== CardType.FUNCTION){
-            cardSym.setText(startingCard.getCardSymbol());
-            addToInventory(startingCard);
-        }else {
-            cardSym.setText("");
+        switch (startingCard.getCardType()) {
+            case FUNCTION:
+                cardSym.setText(startingCard.getCardSymbol());
+                addToInventory(startingCard);
+                break;
+            case STATUS:
+                cardSym.setText("");
+                addToStatuses(startingCard);
+                break;
         }
         showPlayerInfo(playerList.get(currentPlayerIndex));
     }
 
     private void showPlayerInfo(Player player) {
         playerName.setText(player.getName());
+
+        setPlayerInventory(player);
+        setPlayerStatus(player);
+
+        byte[] decodedBytes = Base64.decode(player.getImage(), Base64.DEFAULT);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+        imgPlayer.setImageBitmap(bitmap);
+    }
+
+    private void setPlayerInventory(Player player) {
         LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         inventory.removeAllViews();
         for (Card card : player.getInventory()) {
             Button btn = new Button(this);
 
-            if(card.getCardSymbol() == "S"){
-                Drawable s = getDrawable(R.drawable.skip_text);
-                Drawable hotTub = getDrawable(R.drawable.ic_hot_tub_black_24dp);
-                btn.setCompoundDrawablesWithIntrinsicBounds(null, s,null, hotTub);
-            }
-            if(card.getCardSymbol() == "B"){
-                Drawable b = getDrawable(R.drawable.bail_out_text);
-                Drawable bailOutText = getDrawable(R.drawable.bail_out);
-                btn.setCompoundDrawablesWithIntrinsicBounds(null, b,null, bailOutText);
-            }
+            String drinkText = card.getText().replace(' ', '\n');
+            btn.setText(drinkText);
+            btn.setTextColor(Color.WHITE);
+            btn.setTypeface(Typeface.DEFAULT_BOLD);
             btn.setBackgroundResource(R.drawable.button_inventory);
             btn.setLayoutParams(lparams);
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showAlertBox(v, player, card);
+                    showInventoryBox(v, player, card);
                 }
             });
             inventory.addView(btn);
 
         }
-        byte[] decodedBytes = Base64.decode(player.getImage(), Base64.DEFAULT);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-        imgPlayer.setImageBitmap(bitmap);
+    }
+
+    private void setPlayerStatus(Player player) {
+        statutes.removeAllViews();
+        for (Card card : player.getStatuses()) {
+            Button btn = new Button(this);
+
+            btn.setText(card.getText());
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showStatusPopUp(card);
+                }
+            });
+            statutes.addView(btn);
+        }
     }
 
     private void shuffleDeck() {
@@ -249,10 +277,16 @@ public class TheGame extends AppCompatActivity {
     public void addToInventory(Card cardToAdd){
         Player player = playerList.get(currentPlayerIndex);
         player.addToInventory(cardToAdd);
-        Log.d(TAG, "Added card to inventory");
-        for (Card card : player.getInventory()) {
-            Log.d(TAG, "Card in inventory: " + card.getText());
+    }
+
+    public void addToStatuses(Card cardToAdd) {
+        Player player = playerList.get(currentPlayerIndex);
+        for (Card card : player.getStatuses()) {
+            if (card.getText() == cardToAdd.getText()) {
+                return;
+            }
         }
+        player.addToStatuses(cardToAdd);
     }
 
     private void doCardFunction(FunctionType functionType) {
@@ -269,7 +303,34 @@ public class TheGame extends AppCompatActivity {
                 cardDesc.setText(multiplyDrinkValue(descText, doubleValue));
                 cardExp.setText(multiplyDrinkValue(expText, doubleValue));
                 break;
+            case REMOVESTATUS:
+                removeAllStatusesFromPlayer();
+                break;
+            case REMOVEASTATUS:
+                removeAStatusFromPLayer();
+                break;
         }
+    }
+
+    private void removeAStatusFromPLayer() {
+        for(int i = 0; i < statutes.getChildCount(); i++) {
+            Button button = (Button) statutes.getChildAt(i);
+            Card card = playerList.get(currentPlayerIndex).getStatuses().get(i);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showStatusRemovePopUp(button, card);
+                }
+            });
+        }
+    }
+
+    private void removeAllStatusesFromPlayer() {
+        Player player = playerList.get(currentPlayerIndex);
+        for (Card card : player.getStatuses()) {
+            player.removeFromStatuses(card);
+        }
+        statutes.removeAllViews();
     }
 
     private String multiplyDrinkValue(String text, int multiplyAmount) {
@@ -286,7 +347,7 @@ public class TheGame extends AppCompatActivity {
         return newText;
     }
 
-    private void showAlertBox(View view, Player player, Card card) {
+    private void showInventoryBox(View view, Player player, Card card) {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -295,9 +356,6 @@ public class TheGame extends AppCompatActivity {
                         inventory.removeView(view);
                         player.removeFromInventory(card);
                         doCardFunction(card.getFunctionType());
-                        break;
-
-                    case DialogInterface.BUTTON_NEGATIVE:
                         break;
                 }
             }
@@ -315,4 +373,50 @@ public class TheGame extends AppCompatActivity {
         builder.setMessage(alertMessage).setPositiveButton("Yes!", dialogClickListener)
                 .setNegativeButton("No...", dialogClickListener).show();
     }
+
+    private void showStatusPopUp(Card card) {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        };
+
+        String statusText = "\nCard: " + card.getText()
+                + "\n"
+                + "\nEffect: " + card.getEffectExplanation()
+                + "\n";
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(statusText).setNeutralButton("Got it!", dialogClickListener).show();
+    }
+
+    private void showStatusRemovePopUp(Button button, Card card) {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch(which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        playerList.get(currentPlayerIndex).removeFromStatuses(card);
+                        statutes.removeView(button);
+                        setPlayerStatus(playerList.get(currentPlayerIndex));
+                        break;
+                }
+            }
+        };
+
+        String statusText = "\nCard: " + card.getText()
+                + "\n"
+                + "\nEffect: " + card.getEffectExplanation()
+                + "\n"
+                + "\nAre you sure you want to remove this status?"
+                + "\n";
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(statusText).setPositiveButton("Yes!", dialogClickListener)
+                .setNegativeButton("No...", dialogClickListener).show();
+    }
+
+
 }

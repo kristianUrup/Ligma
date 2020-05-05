@@ -6,11 +6,13 @@ public class Player {
     private String name;
     private String image;
     private ArrayList<Card> inventory;
+    private ArrayList<Card> statuses;
 
     public Player(String name, ArrayList<Card> inventory, String image) {
         this.name = name;
         this.inventory = inventory;
         this.image = image;
+        this.statuses = new ArrayList<>();
     }
 
     public String getImage() {
@@ -44,4 +46,10 @@ public class Player {
     public void removeFromInventory(Card card) {
         inventory.remove(card);
     }
+
+    public ArrayList<Card> getStatuses() { return statuses; }
+
+    public void addToStatuses(Card card) { statuses.add(card); }
+
+    public void removeFromStatuses(Card card) { statuses.remove(card); }
 }
