@@ -23,6 +23,8 @@ import androidx.core.app.ActivityCompat;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+
+import com.example.ligma.LOGIC.Base64Decoder;
 import com.example.ligma.R;
 
 public class PlayerSelection extends Activity {
@@ -80,7 +82,7 @@ public class PlayerSelection extends Activity {
     }
 
     private String imageToString(Bitmap bitmap) {
-        String encodedImage = encodeToBase64(bitmap, Bitmap.CompressFormat.PNG, 100);
+        String encodedImage = Base64Decoder.encodeToBase64(bitmap, Bitmap.CompressFormat.PNG, 100);
         return encodedImage;
     }
 
@@ -95,13 +97,6 @@ public class PlayerSelection extends Activity {
             }
 
         }
-    }
-
-
-    public static String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality) {
-        ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
-        image.compress(compressFormat, quality, byteArrayOS);
-        return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
     }
     private void checkPermission() {
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {

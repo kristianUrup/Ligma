@@ -34,6 +34,7 @@ import com.example.ligma.BE.Player;
 import com.example.ligma.BE.CardType;
 import com.example.ligma.DAL.CardDAO;
 import com.example.ligma.DAL.FirestoreCallback;
+import com.example.ligma.LOGIC.Base64Decoder;
 import com.example.ligma.LOGIC.OnSwipeTouchListener;
 import com.example.ligma.R;
 
@@ -235,14 +236,8 @@ public class TheGame extends AppCompatActivity {
         deckToShuffle.clear();
     }
 
-    public static String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality) {
-        ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
-        image.compress(compressFormat, quality, byteArrayOS);
-        return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
-    }
-
     private void imageToString(Bitmap bitmap) {
-        String encodedImage = encodeToBase64(bitmap, Bitmap.CompressFormat.PNG, 100);
+        String encodedImage = Base64Decoder.encodeToBase64(bitmap, Bitmap.CompressFormat.PNG, 100);
         player.setImage(encodedImage);
     }
 
