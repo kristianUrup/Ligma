@@ -111,13 +111,6 @@ public class PlayerSelection extends Activity {
         }
     }
 
-
-    public static String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality) {
-        ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
-        image.compress(compressFormat, quality, byteArrayOS);
-        return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
-    }
-
     private void checkPermission() {
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {
             return;
@@ -186,6 +179,8 @@ public class PlayerSelection extends Activity {
         AddNewPlayer.setVisibility(View.VISIBLE);
         String name = editText.getText().toString();
         Player playerToAdd = new Player(name, new ArrayList<>(), imgCameraString);
+        imgCameraString = imgDefaultString;
+        imgCamera.setImageResource(R.drawable.defaultpicture);
         players.add(playerToAdd);
         customAdapter = new CustomAdapter(this, android.R.layout.simple_list_item_1, players);
         listView.setAdapter(customAdapter);
