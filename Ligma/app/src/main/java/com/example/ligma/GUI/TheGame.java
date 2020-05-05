@@ -31,7 +31,6 @@ import com.example.ligma.LOGIC.Base64Decoder;
 import com.example.ligma.LOGIC.OnSwipeTouchListener;
 import com.example.ligma.R;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -51,10 +50,10 @@ public class TheGame extends AppCompatActivity {
     TextView cardType;
     LinearLayout inventory;
     GifImageView loadingIcon;
-    ArrayList<Player> playerList;
+    ArrayList<Player> players;
     ImageView imgPlayer;
     TextView cardSym;
-    public ArrayList<Player> players;
+
 
     FrameLayout cardLayout;
 
@@ -67,8 +66,6 @@ public class TheGame extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_the_game);
-
-        playerList = new ArrayList<>();
         deckToShuffle = new ArrayList<>();
 
         deck = new LinkedList<>();
@@ -144,7 +141,7 @@ public class TheGame extends AppCompatActivity {
     }
 
     private void nextTurn() {
-        if (currentPlayerIndex == playerList.size() - 1) {
+        if (currentPlayerIndex == players.size() - 1) {
             currentPlayerIndex = 0;
         }else {
             currentPlayerIndex++;
@@ -175,7 +172,7 @@ public class TheGame extends AppCompatActivity {
         }else {
             cardSym.setText("");
         }
-        showPlayerInfo(playerList.get(currentPlayerIndex));
+        showPlayerInfo(players.get(currentPlayerIndex));
     }
 
     private void showPlayerInfo(Player player) {
@@ -235,7 +232,7 @@ public class TheGame extends AppCompatActivity {
     }
 
     public void addToInventory(Card cardToAdd){
-        Player player = playerList.get(currentPlayerIndex);
+        Player player = players.get(currentPlayerIndex);
         player.addToInventory(cardToAdd);
         Log.d(TAG, "Added card to inventory");
         for (Card card : player.getInventory()) {

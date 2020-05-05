@@ -4,5 +4,6 @@ public enum FunctionType {
     SKIP,
     DOUBLE,
     NONE,
-    REMOVESTATUS
+    REMOVESTATUS,
+    REMOVEASTATUS
 }
