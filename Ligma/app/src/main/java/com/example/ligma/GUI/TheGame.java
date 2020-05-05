@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 
+import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -88,6 +89,9 @@ public class TheGame extends AppCompatActivity {
                 nextTurn();
             }
         });
+
+        cardExp.setAutoSizeTextTypeUniformWithConfiguration(
+                1, 17, 1, TypedValue.COMPLEX_UNIT_DIP);
 
         startGame();
     }
@@ -162,7 +166,7 @@ public class TheGame extends AppCompatActivity {
         cardType.setText(startingCard.getCardType().name());
         cardDesc.setText(startingCard.getText());
 
-        if (startingCard.getCardType() != CardType.DRINK) {
+        if (startingCard.getCardType() != null) {
             cardExp.setText(startingCard.getEffectExplanation());
         }else {
             cardExp.setText("");
