@@ -18,6 +18,8 @@ import java.util.Queue;
 import java.util.Random;
 
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -63,16 +65,10 @@ public class TheGame extends AppCompatActivity {
 
         playerList = new ArrayList<>();
         deckToShuffle = new ArrayList<>();
+
         deck = new LinkedList<>();
-        cardSym = findViewById(R.id.card_symbol);
-        cardDesc = findViewById(R.id.card_description);
-        cardExp = findViewById(R.id.cardExp);
-        cardType = findViewById(R.id.cardType);
-        playerName = findViewById(R.id.player_name);
-        inventory = findViewById(R.id.inventory_layout);
-        cardLayout = findViewById(R.id.cardLayout);
-        imgPlayer = findViewById(R.id.imgPlayer);
         cDAO = new CardDAO();
+
         setPlayers();
 
         initViews();
@@ -81,6 +77,9 @@ public class TheGame extends AppCompatActivity {
             @Override
             public void onSwipeLeft() {
                 super.onSwipeLeft();
+
+                Animation swipe = AnimationUtils.loadAnimation(TheGame.this,R.anim.lefttoright);
+                cardLayout.startAnimation(swipe);
                 nextTurn();
             }
             @Override
@@ -102,6 +101,7 @@ public class TheGame extends AppCompatActivity {
         inventory = findViewById(R.id.inventory_layout);
         cardLayout = findViewById(R.id.cardLayout);
         imgPlayer = findViewById(R.id.imgPlayer);
+        cardLayout = findViewById(R.id.cardLayout);
     }
 
     private void setPlayers() {
