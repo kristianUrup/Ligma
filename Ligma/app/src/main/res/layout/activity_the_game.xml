@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".GUI.TheGame"
-    android:background="@drawable/tequila">
+    android:background="#fffc00">
 
 
     <pl.droidsonroids.gif.GifImageView
@@ -103,22 +103,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardLayout" />
 
-    <HorizontalScrollView
-        android:id="@+id/InventoryScrollView"
+    <TextView
+        android:id="@+id/inventoryView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
+        android:text="Inventory"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/player_name" />
+
+    <HorizontalScrollView
+        android:id="@+id/InventoryScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/layout_background"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/player_name">
+        app:layout_constraintTop_toBottomOf="@+id/inventoryView">
 
         <LinearLayout
             android:id="@+id/inventory_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"/>
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" />
     </HorizontalScrollView>
 
     <ImageView
@@ -133,20 +148,33 @@
 
     <HorizontalScrollView
         android:id="@+id/statusCardView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
         android:background="@drawable/layout_background"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/InventoryScrollView">
+        app:layout_constraintTop_toBottomOf="@+id/statusesView">
 
         <LinearLayout
             android:id="@+id/status_layout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:orientation="horizontal" />
     </HorizontalScrollView>
+
+    <TextView
+        android:id="@+id/statusesView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Statuses"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/InventoryScrollView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

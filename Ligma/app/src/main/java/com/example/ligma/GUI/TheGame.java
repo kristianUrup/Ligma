@@ -7,11 +7,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -19,7 +18,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +50,8 @@ public class TheGame extends AppCompatActivity {
     TextView playerName;
     TextView cardExp;
     TextView cardType;
+    TextView inventoryView;
+    TextView statusesView;
     LinearLayout inventory;
     LinearLayout statutes;
     GifImageView loadingIcon;
@@ -105,6 +105,8 @@ public class TheGame extends AppCompatActivity {
         cardDesc = findViewById(R.id.card_description);
         cardExp = findViewById(R.id.cardExp);
         cardType = findViewById(R.id.cardType);
+        inventoryView = findViewById(R.id.inventoryView);
+        statusesView = findViewById(R.id.statusesView);
         playerName = findViewById(R.id.player_name);
         inventory = findViewById(R.id.inventory_layout);
         statutes = findViewById(R.id.status_layout);
@@ -136,6 +138,8 @@ public class TheGame extends AppCompatActivity {
                 setCurrentRoundInfo();
             }
         });
+        inventoryView.setVisibility(View.INVISIBLE);
+        statusesView.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -164,40 +168,45 @@ public class TheGame extends AppCompatActivity {
         Card startingCard = deck.remove();
         deckToShuffle.add(startingCard);
 
+        player = players.get(currentPlayerIndex);
+
         cardType.setText(startingCard.getCardType().name());
         cardDesc.setText(startingCard.getText());
 
-        if (startingCard.getCardType() != null) {
+        if (startingCard.getEffectExplanation() != null) {
             cardExp.setText(startingCard.getEffectExplanation());
         }else {
             cardExp.setText("");
         }
 
+        if (startingCard.getCardType() == CardType.FUNCTION) {
+            cardSym.setText(startingCard.getCardSymbol());
+        }else {
+            cardSym.setText("");
+        }
         switch (startingCard.getCardType()) {
             case FUNCTION:
-                cardSym.setText(startingCard.getCardSymbol());
                 addToInventory(startingCard);
                 break;
             case STATUS:
-                cardSym.setText("");
                 addToStatuses(startingCard);
                 break;
         }
-        showPlayerInfo(players.get(currentPlayerIndex));
+        showPlayerInfo();
     }
 
-    private void showPlayerInfo(Player player) {
+    private void showPlayerInfo() {
         playerName.setText(player.getName());
 
-        setPlayerInventory(player);
-        setPlayerStatus(player);
+        setPlayerInventory();
+        setPlayerStatus();
 
         byte[] decodedBytes = Base64.decode(player.getImage(), Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
         imgPlayer.setImageBitmap(bitmap);
     }
 
-    private void setPlayerInventory(Player player) {
+    private void setPlayerInventory() {
         LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         inventory.removeAllViews();
         for (Card card : player.getInventory()) {
@@ -212,20 +221,31 @@ public class TheGame extends AppCompatActivity {
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showInventoryBox(v, player, card);
+                    showInventoryBox(v, card);
                 }
             });
             inventory.addView(btn);
 
         }
+
+        if (inventory.getChildCount() > 0) {
+            inventoryView.setVisibility(View.VISIBLE);
+        }else {
+            inventoryView.setVisibility(View.INVISIBLE);
+        }
     }
 
-    private void setPlayerStatus(Player player) {
+    private void setPlayerStatus() {
+        LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         statutes.removeAllViews();
         for (Card card : player.getStatuses()) {
             Button btn = new Button(this);
 
             btn.setText(card.getText());
+            btn.setTextColor(Color.WHITE);
+            btn.setTypeface(Typeface.DEFAULT_BOLD);
+            btn.setBackgroundResource(R.drawable.button_status);
+            btn.setLayoutParams(lparams);
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -233,6 +253,12 @@ public class TheGame extends AppCompatActivity {
                 }
             });
             statutes.addView(btn);
+        }
+
+        if (statutes.getChildCount() > 0) {
+            statusesView.setVisibility(View.VISIBLE);
+        }else {
+            statusesView.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -260,12 +286,10 @@ public class TheGame extends AppCompatActivity {
     }
 
     public void addToInventory(Card cardToAdd){
-        Player player = players.get(currentPlayerIndex);
         player.addToInventory(cardToAdd);
     }
 
     public void addToStatuses(Card cardToAdd) {
-        Player player = players.get(currentPlayerIndex);
         for (Card card : player.getStatuses()) {
             if (card.getText() == cardToAdd.getText()) {
                 return;
@@ -300,7 +324,8 @@ public class TheGame extends AppCompatActivity {
     private void removeAStatusFromPLayer() {
         for(int i = 0; i < statutes.getChildCount(); i++) {
             Button button = (Button) statutes.getChildAt(i);
-            Card card = players.get(currentPlayerIndex).getStatuses().get(i);
+            Card card = player.getStatuses().get(i);
+            button.setBackgroundResource(R.drawable.button_status_delete);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -311,7 +336,6 @@ public class TheGame extends AppCompatActivity {
     }
 
     private void removeAllStatusesFromPlayer() {
-        Player player = players.get(currentPlayerIndex);
         for (Card card : player.getStatuses()) {
             player.removeFromStatuses(card);
         }
@@ -332,7 +356,7 @@ public class TheGame extends AppCompatActivity {
         return newText;
     }
 
-    private void showInventoryBox(View view, Player player, Card card) {
+    private void showInventoryBox(View view, Card card) {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -382,9 +406,9 @@ public class TheGame extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch(which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        players.get(currentPlayerIndex).removeFromStatuses(card);
+                        player.removeFromStatuses(card);
                         statutes.removeView(button);
-                        setPlayerStatus(players.get(currentPlayerIndex));
+                        setPlayerStatus();
                         break;
                 }
             }
