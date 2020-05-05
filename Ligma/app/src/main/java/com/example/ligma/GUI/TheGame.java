@@ -86,11 +86,6 @@ public class TheGame extends AppCompatActivity {
                 cardLayout.startAnimation(swipe);
                 nextTurn();
             }
-            @Override
-            public void onSwipeRight() {
-                super.onSwipeRight();
-                nextTurn();
-            }
         });
 
         cardExp.setAutoSizeTextTypeUniformWithConfiguration(
@@ -147,7 +142,7 @@ public class TheGame extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
+        Toast.makeText(this, "Going back is not an option", Toast.LENGTH_SHORT).show();
     }
 
     private void startGame() {
