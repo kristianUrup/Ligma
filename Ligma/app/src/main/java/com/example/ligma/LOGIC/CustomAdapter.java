@@ -46,6 +46,14 @@ public class CustomAdapter extends ArrayAdapter<Card> {
         ImageView playerImg = view.findViewById(R.id.image_profile);
         Button btnDelete = view.findViewById(R.id.button_delete);
 
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPlayers.remove(position);
+                notifyDataSetChanged();
+            }
+        });
+
         int defaultHeight = 200;
         int imageWidth = defaultHeight;
         int imageHeight = defaultHeight;
