@@ -10,19 +10,23 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import androidx.core.app.ActivityCompat;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+
+import com.example.ligma.LOGIC.Base64Decoder;
+
+import com.example.ligma.BE.Player;
+import com.example.ligma.LOGIC.CustomAdapter;
+
 import com.example.ligma.R;
 
 public class PlayerSelection extends Activity {
@@ -33,11 +37,13 @@ public class PlayerSelection extends Activity {
     Button AddBtn;
     Button AddNewPlayer;
     EditText editText;
-    ArrayAdapter<String> arrayAdapter;
+    ArrayList<Player> players;
+    Button deletePlayerBtn;
+    CustomAdapter customAdapter;
     TextView errorText;
     ImageView imgCamera;
     ArrayList<String> images;
-    String imgDefaultString = "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";
+    String imgDefaultString = "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";
     String imgCameraString;
     private final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP = 101;
     static int PERMISSION_REQUEST_CODE = 1;
@@ -47,6 +53,7 @@ public class PlayerSelection extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_selection);
+        players = new ArrayList<>();
 
         imgCameraString = imgDefaultString;
         images = new ArrayList<>();
@@ -56,13 +63,13 @@ public class PlayerSelection extends Activity {
         AddNewPlayer = findViewById(R.id.btnAddNewPlayer);
         AddBtn = findViewById(R.id.btnAdd);
         editText = findViewById(R.id.txtNewPlayer);
+
         errorText = findViewById(R.id.txtViewErrorText);
         imgCamera = findViewById(R.id.imgCamera);
         imgCamera.setOnClickListener(view -> takePicture());
 
         list = new ArrayList<>();
-        arrayAdapter = new ArrayAdapter<>(getApplicationContext(),
-                android.R.layout.simple_list_item_1, list);
+
 
 
         editText.addTextChangedListener(new TextWatcher() {
@@ -80,7 +87,7 @@ public class PlayerSelection extends Activity {
     }
 
     private String imageToString(Bitmap bitmap) {
-        String encodedImage = encodeToBase64(bitmap, Bitmap.CompressFormat.PNG, 100);
+        String encodedImage = Base64Decoder.encodeToBase64(bitmap, Bitmap.CompressFormat.PNG, 100);
         return encodedImage;
     }
 
@@ -97,12 +104,6 @@ public class PlayerSelection extends Activity {
         }
     }
 
-
-    public static String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality) {
-        ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
-        image.compress(compressFormat, quality, byteArrayOS);
-        return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
-    }
     private void checkPermission() {
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {
             return;
@@ -126,7 +127,17 @@ public class PlayerSelection extends Activity {
         }
     }
 
-
+    private boolean checkForDuplicate()
+    {
+        for (Player p: players)
+        {
+            if(p.getName().equals(editText.getText().toString()))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     private void takePicture() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -139,7 +150,8 @@ public class PlayerSelection extends Activity {
 
     private void checkAndAddPlayer(){
         if(!TextUtils.isEmpty(editText.getText().toString())) {
-            if(list.contains(editText.getText().toString())) {
+            if(checkForDuplicate())
+            {
                 AddNewPlayer.setVisibility(View.INVISIBLE);
                 String noDuplicateNameErrorText = "No duplicate names!";
                 editText.setError(noDuplicateNameErrorText);
@@ -166,33 +178,32 @@ public class PlayerSelection extends Activity {
         }
     }
 
-
     private void addToListView(){
         AddNewPlayer.setVisibility(View.VISIBLE);
-
-        String names = editText.getText().toString();
-        list.add(names);
-
-        images.add(imgCameraString);
+        String name = editText.getText().toString();
+        Player playerToAdd = new Player(name, new ArrayList<>(), imgCameraString);
 
         imgCameraString = imgDefaultString;
         imgCamera.setImageResource(R.drawable.defaultpicture);
-
-        listView.setAdapter(arrayAdapter);
-        arrayAdapter.notifyDataSetChanged();
-        errorText.setText("");
         editText.setText("");
+
+        players.add(playerToAdd);
+        customAdapter = new CustomAdapter(this, android.R.layout.simple_list_item_1, players);
+        listView.setAdapter(customAdapter);
+        customAdapter.notifyDataSetChanged();
     }
 
     public void onClickStart(View view){
-        if(list.isEmpty()){
+        if(players.isEmpty()){
             String startGameWithoutPlayers = "You cannot start a game with less than 2 players";
             errorText.setText(startGameWithoutPlayers);
         }else {
             Intent startGameIntent = new Intent(this, TheGame.class);
-            startGameIntent.putStringArrayListExtra("player_list", list);
-            startGameIntent.putStringArrayListExtra("image_list", images);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("players", players);
+            startGameIntent.putExtras(bundle);
             startActivity(startGameIntent);
         }
     }
+
 }

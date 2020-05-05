@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/tequila"
     tools:context=".GUI.PlayerSelection">
 
     <Button
@@ -13,8 +14,10 @@
         android:layout_marginStart="145dp"
         android:layout_marginEnd="146dp"
         android:layout_marginBottom="24dp"
+        android:background="@drawable/button_shape"
         android:onClick="onClickStart"
         android:text="@string/start"
+        android:textColor="@color/button_text"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,16 +26,22 @@
 
     <EditText
         android:id="@+id/txtNewPlayer"
-        android:layout_width="213dp"
-        android:layout_height="wrap_content"
+        android:layout_width="210dp"
+        android:layout_height="45dp"
         android:layout_marginStart="99dp"
-        android:layout_marginEnd="99dp"
-        android:layout_marginBottom="9dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="160dp"
+        android:backgroundTint="@color/btn_background"
+        android:digits="AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvXxYyZzÆæØøÅå "
         android:ems="10"
         android:hint="@string/newPlayerName"
-        android:inputType="text" android:digits="AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvXxYyZzÆæØøÅå "
-        app:layout_constraintBottom_toTopOf="@+id/btnAddNewPlayer"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:inputType="text"
+        android:maxLength="15"
+        android:textColor="@color/btn_background"
+        android:textColorHint="#42a5f5"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/txtViewErrorText"
+        app:layout_constraintEnd_toStartOf="@+id/btnAddNewPlayer"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ListView
@@ -44,20 +53,34 @@
         android:layout_marginEnd="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
+
+    </ListView>
 
     <Button
         android:id="@+id/btnAddNewPlayer"
-        android:layout_width="88dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="161dp"
-        android:layout_marginEnd="162dp"
-        android:layout_marginBottom="18dp"
-        android:text="@string/addPlayer"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="160dp"
+        android:background="@drawable/add_player"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/txtViewErrorText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/txtNewPlayer" />
+
+    <TextView
+        android:id="@+id/txtTip"
+        android:layout_width="410dp"
+        android:layout_height="241dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/playerSelectionTip"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtViewErrorText"
@@ -65,7 +88,7 @@
         android:layout_height="43dp"
         android:layout_marginStart="49dp"
         android:layout_marginEnd="50dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="16dp"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/btnAdd"
         app:layout_constraintEnd_toEndOf="parent"
@@ -76,28 +99,9 @@
         android:id="@+id/imgCamera"
         android:layout_width="191dp"
         android:layout_height="153dp"
-        android:layout_marginStart="122dp"
-        android:layout_marginEnd="123dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="108dp"
         android:src="@drawable/defaultpicture"
         app:layout_constraintBottom_toTopOf="@+id/txtNewPlayer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/txtTip"
-        android:layout_width="331dp"
-        android:layout_height="414dp"
-        android:layout_marginStart="83dp"
-        android:layout_marginTop="9dp"
-        android:layout_marginEnd="84dp"
-        android:layout_marginBottom="7dp"
-        android:text="@string/playerSelectionTip"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        app:layout_constraintBottom_toTopOf="@+id/imgCamera"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LviewPlayers" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

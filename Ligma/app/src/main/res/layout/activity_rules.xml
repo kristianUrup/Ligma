@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GUI.Rules">
+    tools:context=".GUI.Rules"
+    android:background="@drawable/tequila_dark">
 
     <ScrollView
         android:layout_width="wrap_content"
@@ -27,12 +28,14 @@
                 android:text="THE RULES"
                 android:textAlignment="center"
                 android:textSize="36sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/textView_text"/>
 
             <TextView
                 android:id="@+id/space1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@color/textView_text"/>
 
             <TextView
                 android:id="@+id/textRounds"
@@ -43,20 +46,23 @@
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/textView_text"/>
 
             <TextView
                 android:id="@+id/textRoundsExp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="This game consist of round. Every round a player gets the card currently on top of the deck. This card then dictates what that player or multiple players should do that round. It can also be a card that can be helpful to the player they can use later on!"
+                android:text="This game consist of rounds. Every round a player gets the card currently on top of the deck. This card then dictates what that player or multiple players should do that round. It can also be a card that can be helpful to the player and can be used later on!"
                 android:textAlignment="center"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textColor="@color/textView_text"/>
 
             <TextView
                 android:id="@+id/space2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@color/textView_text"/>
 
             <TextView
                 android:id="@+id/textInventory"
@@ -65,20 +71,23 @@
                 android:text="INVENTORY"
                 android:textAlignment="center"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/textView_text"/>
 
             <TextView
                 android:id="@+id/textInventoryExp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Every player has their own Inventory. When you get a card thats labelled FUNCTION you get that card added to your iventory. You can then use this card when its your turn and only on your turn! Also FUNCTION cards are a one time use, so use them wisely!"
+                android:text="Every player has their own Inventory. When you get a card thats labelled FUNCTION you get that card added to your inventory. You can then use this card on your turn. FUNCTION cards are a one time use, so use them wisely!"
                 android:textAlignment="center"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textColor="@color/textView_text"/>
 
             <TextView
                 android:id="@+id/space3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@color/textView_text"/>
 
             <TextView
                 android:id="@+id/textCards"
@@ -88,7 +97,8 @@
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/textView_text"/>
 
             <TextView
                 android:id="@+id/textCardsExp"
@@ -96,7 +106,8 @@
                 android:layout_height="wrap_content"
                 android:text="There are a lot of cards in this game! And every card can fall into different categories. These categories consist:"
                 android:textAlignment="center"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textColor="@color/textView_text"/>
 
             <TextView
                 android:id="@+id/textCardTypes"
@@ -105,7 +116,8 @@
                 android:text="DRINK, EVENT, FUNCTION and STATUS"
                 android:textAlignment="center"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/textView_text"/>
 
             <TextView
                 android:id="@+id/textCardExp2"
@@ -113,7 +125,8 @@
                 android:layout_height="wrap_content"
                 android:text="Don't worry about what these cards do because they will explain that themselves!"
                 android:textAlignment="center"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textColor="@color/textView_text"/>
 
         </LinearLayout>
     </ScrollView>

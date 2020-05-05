@@ -1,10 +1,7 @@
 package com.example.ligma.GUI;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -13,12 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Random;
-
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -32,14 +23,22 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.ligma.BE.Card;
+import com.example.ligma.BE.CardType;
 import com.example.ligma.BE.FunctionType;
 import com.example.ligma.BE.Player;
-import com.example.ligma.BE.CardType;
 import com.example.ligma.DAL.CardDAO;
 import com.example.ligma.DAL.FirestoreCallback;
+import com.example.ligma.LOGIC.Base64Decoder;
 import com.example.ligma.LOGIC.OnSwipeTouchListener;
 import com.example.ligma.R;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Random;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -56,9 +55,10 @@ public class TheGame extends AppCompatActivity {
     LinearLayout inventory;
     LinearLayout statutes;
     GifImageView loadingIcon;
-    ArrayList<Player> playerList;
+    ArrayList<Player> players;
     ImageView imgPlayer;
     TextView cardSym;
+
 
     FrameLayout cardLayout;
 
@@ -71,8 +71,6 @@ public class TheGame extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_the_game);
-
-        playerList = new ArrayList<>();
         deckToShuffle = new ArrayList<>();
 
         deck = new LinkedList<>();
@@ -81,6 +79,9 @@ public class TheGame extends AppCompatActivity {
         setPlayers();
 
         initViews();
+
+        Bundle bundleObject = getIntent().getExtras();
+        players = (ArrayList<Player>) bundleObject.getSerializable("players");
 
         cardLayout.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
@@ -114,16 +115,6 @@ public class TheGame extends AppCompatActivity {
     }
 
     private void setPlayers() {
-        Intent intent = getIntent();
-        ArrayList<String> playerListAsString = intent.getStringArrayListExtra("player_list");
-
-        Intent imgIntent = getIntent();
-        ArrayList<String> playerImageListAsString = imgIntent.getStringArrayListExtra("image_list");
-
-        for (int i = 0, j = 0; i < playerListAsString.size() && j < playerImageListAsString.size(); i++, j++) {
-            Player playerToAdd = new Player(playerListAsString.get(i), new ArrayList<>(), playerImageListAsString.get(j));
-            playerList.add(playerToAdd);
-        }
     }
 
     private void initDeck() {
@@ -157,7 +148,7 @@ public class TheGame extends AppCompatActivity {
     }
 
     private void nextTurn() {
-        if (currentPlayerIndex == playerList.size() - 1) {
+        if (currentPlayerIndex == players.size() - 1) {
             currentPlayerIndex = 0;
         }else {
             currentPlayerIndex++;
@@ -192,7 +183,7 @@ public class TheGame extends AppCompatActivity {
                 addToStatuses(startingCard);
                 break;
         }
-        showPlayerInfo(playerList.get(currentPlayerIndex));
+        showPlayerInfo(players.get(currentPlayerIndex));
     }
 
     private void showPlayerInfo(Player player) {
@@ -263,19 +254,13 @@ public class TheGame extends AppCompatActivity {
         deckToShuffle.clear();
     }
 
-    public static String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality) {
-        ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
-        image.compress(compressFormat, quality, byteArrayOS);
-        return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
-    }
-
     private void imageToString(Bitmap bitmap) {
-        String encodedImage = encodeToBase64(bitmap, Bitmap.CompressFormat.PNG, 100);
+        String encodedImage = Base64Decoder.encodeToBase64(bitmap, Bitmap.CompressFormat.PNG, 100);
         player.setImage(encodedImage);
     }
 
     public void addToInventory(Card cardToAdd){
-        Player player = playerList.get(currentPlayerIndex);
+        Player player = players.get(currentPlayerIndex);
         player.addToInventory(cardToAdd);
     }
 

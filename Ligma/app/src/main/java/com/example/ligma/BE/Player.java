@@ -1,8 +1,8 @@
 package com.example.ligma.BE;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Player {
+public class Player implements Serializable {
     private String name;
     private String image;
     private ArrayList<Card> inventory;
