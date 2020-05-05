@@ -86,11 +86,6 @@ public class TheGame extends AppCompatActivity {
                 cardLayout.startAnimation(swipe);
                 nextTurn();
             }
-            @Override
-            public void onSwipeRight() {
-                super.onSwipeRight();
-                nextTurn();
-            }
         });
 
         cardExp.setAutoSizeTextTypeUniformWithConfiguration(
@@ -109,6 +104,7 @@ public class TheGame extends AppCompatActivity {
         cardLayout = findViewById(R.id.cardLayout);
         imgPlayer = findViewById(R.id.imgPlayer);
         cardLayout = findViewById(R.id.cardLayout);
+        loadingIcon = findViewById(R.id.loadingIcon);
     }
 
     private void setPlayers() {
