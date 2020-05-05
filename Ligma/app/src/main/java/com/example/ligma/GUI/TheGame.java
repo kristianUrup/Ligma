@@ -162,7 +162,7 @@ public class TheGame extends AppCompatActivity {
         cardType.setText(startingCard.getCardType().name());
         cardDesc.setText(startingCard.getText());
 
-        if (startingCard.getCardType() != CardType.DRINK) {
+        if (startingCard.getCardType() != null) {
             cardExp.setText(startingCard.getEffectExplanation());
         }else {
             cardExp.setText("");
