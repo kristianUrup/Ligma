@@ -47,6 +47,7 @@ public class TheGame extends AppCompatActivity {
     ArrayList<Player> playerList;
     ImageView imgPlayer;
     TextView cardSym;
+    ArrayList<Player> players;
 
     FrameLayout cardLayout;
 
@@ -64,18 +65,13 @@ public class TheGame extends AppCompatActivity {
         playerImageList = new ArrayList<>();
         deckToShuffle = new ArrayList<>();
         deck = new LinkedList<>();
-        cardSym = findViewById(R.id.card_symbol);
-        cardDesc = findViewById(R.id.card_description);
-        cardExp = findViewById(R.id.cardExp);
-        cardType = findViewById(R.id.cardType);
-        playerName = findViewById(R.id.player_name);
-        inventory = findViewById(R.id.inventory_layout);
-        cardLayout = findViewById(R.id.cardLayout);
-        imgPlayer = findViewById(R.id.imgPlayer);
         cDAO = new CardDAO();
         setPlayers();
 
         initViews();
+
+        Bundle bundleObject = getIntent().getExtras();
+        players = (ArrayList<Player>) bundleObject.getSerializable("players");
 
         cardLayout.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
@@ -105,16 +101,6 @@ public class TheGame extends AppCompatActivity {
     }
 
     private void setPlayers() {
-        Intent intent = getIntent();
-        ArrayList<String> playerListAsString = intent.getStringArrayListExtra("player_list");
-
-        Intent imgIntent = getIntent();
-        ArrayList<String> playerImageListAsString = imgIntent.getStringArrayListExtra("image_list");
-
-        for (int i = 0, j = 0; i < playerListAsString.size() && j < playerImageListAsString.size(); i++, j++) {
-            Player playerToAdd = new Player(playerListAsString.get(i), new ArrayList<>(), playerImageListAsString.get(j));
-            playerList.add(playerToAdd);
-        }
         Log.d("CREATION", "player list: " + playerList.toString());
     }
 

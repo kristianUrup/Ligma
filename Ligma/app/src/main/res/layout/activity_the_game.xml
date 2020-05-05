@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GUI.TheGame">
+    tools:context=".GUI.TheGame"
+    android:background="@color/background">
 
     <FrameLayout
         android:id="@+id/cardLayout"
@@ -44,7 +45,7 @@
             android:textSize="24sp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:textStyle="bold" />
+            />
 
         <TextView
             android:id="@+id/card_description"

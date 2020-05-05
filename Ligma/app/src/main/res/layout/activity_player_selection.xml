@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GUI.PlayerSelection">
+    tools:context=".GUI.PlayerSelection"
+    android:background="@drawable/tequila">
 
     <Button
         android:id="@+id/btnAdd"
@@ -19,7 +20,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/button_shape"
+        android:textColor="@color/button_text"/>
 
     <EditText
         android:id="@+id/txtNewPlayer"
@@ -33,7 +36,11 @@
         android:inputType="text" android:digits="AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvXxYyZzÆæØøÅå "
         app:layout_constraintBottom_toTopOf="@+id/btnAddNewPlayer"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/btn_background"
+        android:textColorHint="#42a5f5"
+        android:textStyle="bold"
+        android:backgroundTint="@color/btn_background"/>
 
     <ListView
         android:id="@+id/LviewPlayers"
@@ -57,7 +64,9 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/txtViewErrorText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/button_shape"
+        android:textColor="@color/button_text"/>
 
     <TextView
         android:id="@+id/txtViewErrorText"
