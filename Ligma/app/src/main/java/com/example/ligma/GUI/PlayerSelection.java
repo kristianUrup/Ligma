@@ -179,8 +179,11 @@ public class PlayerSelection extends Activity {
         AddNewPlayer.setVisibility(View.VISIBLE);
         String name = editText.getText().toString();
         Player playerToAdd = new Player(name, new ArrayList<>(), imgCameraString);
+
         imgCameraString = imgDefaultString;
         imgCamera.setImageResource(R.drawable.defaultpicture);
+        editText.setText("");
+
         players.add(playerToAdd);
         customAdapter = new CustomAdapter(this, android.R.layout.simple_list_item_1, players);
         listView.setAdapter(customAdapter);
