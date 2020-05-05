@@ -106,7 +106,7 @@
         android:layout_marginBottom="7dp"
         android:text="@string/playerSelectionTip"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/imgCamera"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
