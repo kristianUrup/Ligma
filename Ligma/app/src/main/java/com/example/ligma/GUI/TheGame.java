@@ -265,7 +265,7 @@ public class TheGame extends AppCompatActivity {
     }
 
     public void addToStatuses(Card cardToAdd) {
-        Player player = playerList.get(currentPlayerIndex);
+        Player player = players.get(currentPlayerIndex);
         for (Card card : player.getStatuses()) {
             if (card.getText() == cardToAdd.getText()) {
                 return;
@@ -300,7 +300,7 @@ public class TheGame extends AppCompatActivity {
     private void removeAStatusFromPLayer() {
         for(int i = 0; i < statutes.getChildCount(); i++) {
             Button button = (Button) statutes.getChildAt(i);
-            Card card = playerList.get(currentPlayerIndex).getStatuses().get(i);
+            Card card = players.get(currentPlayerIndex).getStatuses().get(i);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -311,7 +311,7 @@ public class TheGame extends AppCompatActivity {
     }
 
     private void removeAllStatusesFromPlayer() {
-        Player player = playerList.get(currentPlayerIndex);
+        Player player = players.get(currentPlayerIndex);
         for (Card card : player.getStatuses()) {
             player.removeFromStatuses(card);
         }
@@ -382,9 +382,9 @@ public class TheGame extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch(which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        playerList.get(currentPlayerIndex).removeFromStatuses(card);
+                        players.get(currentPlayerIndex).removeFromStatuses(card);
                         statutes.removeView(button);
-                        setPlayerStatus(playerList.get(currentPlayerIndex));
+                        setPlayerStatus(players.get(currentPlayerIndex));
                         break;
                 }
             }
