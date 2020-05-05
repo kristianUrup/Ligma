@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -89,6 +90,9 @@ public class TheGame extends AppCompatActivity {
                 nextTurn();
             }
         });
+
+        cardExp.setAutoSizeTextTypeUniformWithConfiguration(
+                1, 17, 1, TypedValue.COMPLEX_UNIT_DIP);
 
         startGame();
     }
