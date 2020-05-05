@@ -2,37 +2,28 @@ package com.example.ligma.GUI;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.ButtonBarLayout;
 import androidx.core.app.ActivityCompat;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import com.example.ligma.LOGIC.Base64Decoder;
 
-import com.example.ligma.BE.Card;
 import com.example.ligma.BE.Player;
 import com.example.ligma.LOGIC.CustomAdapter;
 
@@ -134,7 +125,17 @@ public class PlayerSelection extends Activity {
         }
     }
 
-
+    private boolean checkForDuplicate()
+    {
+        for (Player p: players)
+        {
+            if(p.getName().equals(editText.getText().toString()))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     private void takePicture() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -147,7 +148,8 @@ public class PlayerSelection extends Activity {
 
     private void checkAndAddPlayer(){
         if(!TextUtils.isEmpty(editText.getText().toString())) {
-            if(list.contains(editText.getText().toString())) {
+            if(checkForDuplicate())
+            {
                 AddNewPlayer.setVisibility(View.INVISIBLE);
                 String noDuplicateNameErrorText = "No duplicate names!";
                 editText.setError(noDuplicateNameErrorText);
