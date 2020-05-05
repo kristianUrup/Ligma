@@ -72,11 +72,13 @@ public class PlayerSelection extends Activity {
         AddNewPlayer = findViewById(R.id.btnAddNewPlayer);
         AddBtn = findViewById(R.id.btnAdd);
         editText = findViewById(R.id.txtNewPlayer);
+
         errorText = findViewById(R.id.txtViewErrorText);
         imgCamera = findViewById(R.id.imgCamera);
         imgCamera.setOnClickListener(view -> takePicture());
 
         list = new ArrayList<>();
+
 
 
         editText.addTextChangedListener(new TextWatcher() {
@@ -200,7 +202,4 @@ public class PlayerSelection extends Activity {
         }
     }
 
-    private void deletePlayer(int position){
-
-    }
 }

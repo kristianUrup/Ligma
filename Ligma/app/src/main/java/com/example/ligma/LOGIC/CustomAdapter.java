@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import com.example.ligma.BE.Card;
 import com.example.ligma.BE.Player;
+import com.example.ligma.GUI.MainActivity;
 import com.example.ligma.R;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class CustomAdapter extends ArrayAdapter<Card> {
     ArrayList<Player> mPlayers;
     public CustomAdapter(@NonNull Context context, int resource, ArrayList<Player> players) {
         super(context, resource);
-        mPlayers = players;
+        this.mPlayers = players;
     }
     @Override
     public int getCount() {
@@ -71,5 +72,6 @@ public class CustomAdapter extends ArrayAdapter<Card> {
         Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length );
         return bitmap;
     }
+
 
 }

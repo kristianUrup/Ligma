@@ -54,7 +54,7 @@ public class TheGame extends AppCompatActivity {
     ArrayList<Player> playerList;
     ImageView imgPlayer;
     TextView cardSym;
-    ArrayList<Player> players;
+    public ArrayList<Player> players;
 
     FrameLayout cardLayout;
 
