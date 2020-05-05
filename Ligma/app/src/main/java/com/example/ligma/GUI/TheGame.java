@@ -1,22 +1,13 @@
 package com.example.ligma.GUI;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Random;
-
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.Animation;
@@ -28,15 +19,23 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.ligma.BE.Card;
+import com.example.ligma.BE.CardType;
 import com.example.ligma.BE.FunctionType;
 import com.example.ligma.BE.Player;
-import com.example.ligma.BE.CardType;
 import com.example.ligma.DAL.CardDAO;
 import com.example.ligma.DAL.FirestoreCallback;
 import com.example.ligma.LOGIC.Base64Decoder;
 import com.example.ligma.LOGIC.OnSwipeTouchListener;
 import com.example.ligma.R;
+
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Random;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -55,6 +54,7 @@ public class TheGame extends AppCompatActivity {
     ArrayList<Player> playerList;
     ImageView imgPlayer;
     TextView cardSym;
+    ArrayList<Player> players;
 
     FrameLayout cardLayout;
 
@@ -77,6 +77,9 @@ public class TheGame extends AppCompatActivity {
         setPlayers();
 
         initViews();
+
+        Bundle bundleObject = getIntent().getExtras();
+        players = (ArrayList<Player>) bundleObject.getSerializable("players");
 
         cardLayout.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
@@ -109,16 +112,6 @@ public class TheGame extends AppCompatActivity {
     }
 
     private void setPlayers() {
-        Intent intent = getIntent();
-        ArrayList<String> playerListAsString = intent.getStringArrayListExtra("player_list");
-
-        Intent imgIntent = getIntent();
-        ArrayList<String> playerImageListAsString = imgIntent.getStringArrayListExtra("image_list");
-
-        for (int i = 0, j = 0; i < playerListAsString.size() && j < playerImageListAsString.size(); i++, j++) {
-            Player playerToAdd = new Player(playerListAsString.get(i), new ArrayList<>(), playerImageListAsString.get(j));
-            playerList.add(playerToAdd);
-        }
     }
 
     private void initDeck() {
