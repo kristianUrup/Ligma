@@ -277,11 +277,6 @@ public class TheGame extends AppCompatActivity {
         deckToShuffle.clear();
     }
 
-    private void imageToString(Bitmap bitmap) {
-        String encodedImage = Base64Decoder.encodeToBase64(bitmap, Bitmap.CompressFormat.PNG, 100);
-        player.setImage(encodedImage);
-    }
-
     public void addToInventory(Card cardToAdd){
         player.addToInventory(cardToAdd);
     }
