@@ -22,11 +22,12 @@ import androidx.core.app.ActivityCompat;
 
 import java.util.ArrayList;
 
-import com.example.ligma.LOGIC.Base64Decoder;
+import com.example.ligma.LOGIC.Base64Coding;
 
 import com.example.ligma.BE.Player;
 import com.example.ligma.LOGIC.CustomAdapter;
 
+import com.example.ligma.LOGIC.PictureHandling;
 import com.example.ligma.R;
 
 public class PlayerSelection extends Activity {
@@ -38,7 +39,6 @@ public class PlayerSelection extends Activity {
     Button AddNewPlayer;
     EditText editText;
     ArrayList<Player> players;
-    Button deletePlayerBtn;
     CustomAdapter customAdapter;
     TextView errorText;
     ImageView imgCamera;
@@ -47,6 +47,7 @@ public class PlayerSelection extends Activity {
     String imgCameraString;
     private final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP = 101;
     static int PERMISSION_REQUEST_CODE = 1;
+    PictureHandling pictureHandling;
 
 
     @Override
@@ -57,7 +58,10 @@ public class PlayerSelection extends Activity {
 
         imgCameraString = imgDefaultString;
         images = new ArrayList<>();
-        checkPermission();
+
+        pictureHandling = new PictureHandling(this);
+        pictureHandling.checkPermission(this);
+
         txtTip = findViewById(R.id.txtTip);
         listView = findViewById(R.id.LviewPlayers);
         AddNewPlayer = findViewById(R.id.btnAddNewPlayer);
@@ -66,7 +70,7 @@ public class PlayerSelection extends Activity {
 
         errorText = findViewById(R.id.txtViewErrorText);
         imgCamera = findViewById(R.id.imgCamera);
-        imgCamera.setOnClickListener(view -> takePicture());
+        imgCamera.setOnClickListener(view -> pictureHandling.takePicture(this));
 
         list = new ArrayList<>();
 
@@ -86,11 +90,6 @@ public class PlayerSelection extends Activity {
         });
     }
 
-    private String imageToString(Bitmap bitmap) {
-        String encodedImage = Base64Decoder.encodeToBase64(bitmap, Bitmap.CompressFormat.PNG, 100);
-        return encodedImage;
-    }
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP) {
             if (resultCode == RESULT_OK) {
@@ -98,32 +97,9 @@ public class PlayerSelection extends Activity {
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
                 Log.d(TAG, "Size of bitmap = " + imageBitmap.getByteCount());
                 imgCamera.setImageBitmap(imageBitmap);
-                imgCameraString = imageToString(imageBitmap);
+                imgCameraString = Base64Coding.imageToString(imageBitmap);
             }
 
-        }
-    }
-
-    private void checkPermission() {
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {
-            return;
-        }
-
-        ArrayList<String> permissions = new ArrayList<String>();
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            permissions.add(Manifest.permission.CAMERA);
-        }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
-        }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
-        }
-        if (permissions.size() > 0) {
-            ActivityCompat.requestPermissions(this, permissions.toArray(new String[permissions.size()]), PERMISSION_REQUEST_CODE);
         }
     }
 
@@ -137,15 +113,6 @@ public class PlayerSelection extends Activity {
             }
         }
         return false;
-    }
-    private void takePicture() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP);
-
-        } else
-            Log.d(TAG, "camera app could NOT be started");
     }
 
     private void checkAndAddPlayer(){

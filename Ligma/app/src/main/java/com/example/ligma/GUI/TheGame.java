@@ -6,8 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.TypedValue;
@@ -29,8 +27,9 @@ import com.example.ligma.BE.FunctionType;
 import com.example.ligma.BE.Player;
 import com.example.ligma.DAL.CardDAO;
 import com.example.ligma.DAL.FirestoreCallback;
-import com.example.ligma.LOGIC.Base64Decoder;
+import com.example.ligma.LOGIC.Base64Coding;
 import com.example.ligma.LOGIC.OnSwipeTouchListener;
+import com.example.ligma.LOGIC.StatusHandling;
 import com.example.ligma.R;
 
 import java.util.ArrayList;
@@ -64,6 +63,7 @@ public class TheGame extends AppCompatActivity {
     private int currentPlayerIndex = 0;
 
     CardDAO cDAO;
+    StatusHandling statusHandling;
 
 
     @Override
@@ -75,9 +75,9 @@ public class TheGame extends AppCompatActivity {
         deck = new LinkedList<>();
         cDAO = new CardDAO();
 
-        setPlayers();
-
         initViews();
+        statusHandling = new StatusHandling(this);
+
 
         Bundle bundleObject = getIntent().getExtras();
         players = (ArrayList<Player>) bundleObject.getSerializable("players");
@@ -113,9 +113,6 @@ public class TheGame extends AppCompatActivity {
         imgPlayer = findViewById(R.id.imgPlayer);
         cardLayout = findViewById(R.id.cardLayout);
         loadingIcon = findViewById(R.id.loadingIcon);
-    }
-
-    private void setPlayers() {
     }
 
     private void initDeck() {
@@ -200,8 +197,7 @@ public class TheGame extends AppCompatActivity {
         setPlayerInventory();
         setPlayerStatus();
 
-        byte[] decodedBytes = Base64.decode(player.getImage(), Base64.DEFAULT);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+        Bitmap bitmap = Base64Coding.decodeToBitmap(player.getImage());
         imgPlayer.setImageBitmap(bitmap);
     }
 
@@ -248,7 +244,7 @@ public class TheGame extends AppCompatActivity {
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showStatusPopUp(card);
+                    statusHandling.showStatusPopUp(card);
                 }
             });
             statutes.addView(btn);
@@ -277,11 +273,6 @@ public class TheGame extends AppCompatActivity {
         }
 
         deckToShuffle.clear();
-    }
-
-    private void imageToString(Bitmap bitmap) {
-        String encodedImage = Base64Decoder.encodeToBase64(bitmap, Bitmap.CompressFormat.PNG, 100);
-        player.setImage(encodedImage);
     }
 
     public void addToInventory(Card cardToAdd){
@@ -369,10 +360,7 @@ public class TheGame extends AppCompatActivity {
             }
         };
 
-        String alertMessage = "Card: " + card.getText()
-                + "\n"
-                + "\nEffect: " + card.getEffectExplanation()
-                + "\n"
+        String alertMessage = statusHandling.popUpText(card)
                 + "\nOnce used it will be removed from your inventory!"
                 + "\n"
                 + "\nAre you sure you want to use this card?";
@@ -380,23 +368,6 @@ public class TheGame extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(alertMessage).setPositiveButton("Yes!", dialogClickListener)
                 .setNegativeButton("No...", dialogClickListener).show();
-    }
-
-    private void showStatusPopUp(Card card) {
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        };
-
-        String statusText = "\nCard: " + card.getText()
-                + "\n"
-                + "\nEffect: " + card.getEffectExplanation()
-                + "\n";
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(statusText).setNeutralButton("Got it!", dialogClickListener).show();
     }
 
     private void showStatusRemovePopUp(Button button, Card card) {
@@ -413,10 +384,7 @@ public class TheGame extends AppCompatActivity {
             }
         };
 
-        String statusText = "\nCard: " + card.getText()
-                + "\n"
-                + "\nEffect: " + card.getEffectExplanation()
-                + "\n"
+        String statusText = statusHandling.popUpText(card)
                 + "\nAre you sure you want to remove this status?"
                 + "\n";
 
@@ -425,6 +393,4 @@ public class TheGame extends AppCompatActivity {
         builder.setMessage(statusText).setPositiveButton("Yes!", dialogClickListener)
                 .setNegativeButton("No...", dialogClickListener).show();
     }
-
-
 }
