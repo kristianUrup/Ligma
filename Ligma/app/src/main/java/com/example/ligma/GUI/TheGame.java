@@ -215,9 +215,7 @@ public class TheGame extends AppCompatActivity {
             btn.setLayoutParams(lparams);
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    showInventoryBox(v, card);
-                }
+                public void onClick(View v) { showInventoryBox(v, card); }
             });
             inventory.addView(btn);
 
@@ -355,6 +353,7 @@ public class TheGame extends AppCompatActivity {
                         inventory.removeView(view);
                         player.removeFromInventory(card);
                         doCardFunction(card.getFunctionType());
+                        setPlayerInventory();
                         break;
                 }
             }
