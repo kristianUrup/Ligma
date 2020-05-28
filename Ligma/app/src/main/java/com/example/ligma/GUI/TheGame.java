@@ -65,7 +65,9 @@ public class TheGame extends AppCompatActivity {
     CardDAO cDAO;
     StatusHandling statusHandling;
 
-
+    /**
+     * OnCreate instantiates all of our variables and sets up the activity to be used.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
