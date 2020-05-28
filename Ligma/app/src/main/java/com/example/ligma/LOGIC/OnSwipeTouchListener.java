@@ -10,7 +10,7 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
 
     /**
      * initializes gestureDetector.
-     * @param context
+     * @param context The current context
      */
     public OnSwipeTouchListener(Context context) {
         gestureDetector = new GestureDetector(context, new GestureListener());
@@ -19,8 +19,8 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
     /**
      * Returns a boolean based on a MotionEvent.
      * @param v
-     * @param event
-     * @return
+     * @param event The motion events
+     * @return if there was a motion events
      */
     @Override
     public boolean onTouch(View v, MotionEvent event) {
@@ -73,11 +73,13 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
         }
 
         /**
-         * @param e1
-         * @param e2
-         * @param velocityX
-         * @param velocityY
-         * @return
+         * Check whether the user swiped left or right based on the motionevents postion and the velocity from the swipe
+         * The velocity is based on the x and y-axis from the swipe
+         * @param e1 Motionevent one
+         * @param e2 Motionevent two
+         * @param velocityX velocity from the x-axis
+         * @param velocityY velocity from the y-axis
+         * @return just returns false
          */
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {

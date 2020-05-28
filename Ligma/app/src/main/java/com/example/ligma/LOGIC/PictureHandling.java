@@ -33,7 +33,7 @@ public class PictureHandling {
 
     /**
      * Takes a picture else returns an error code in log.
-     * @param activity
+     * @param activity The activity to start for result
      */
     public void takePicture(Activity activity) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -47,7 +47,7 @@ public class PictureHandling {
 
     /**
      * Checks for camera permissions else asks for it.
-     * @param activity
+     * @param activity The activity to request permission to
      */
     public void checkPermission(Activity activity) {
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {

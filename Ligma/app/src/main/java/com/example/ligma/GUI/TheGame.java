@@ -122,7 +122,7 @@ public class TheGame extends AppCompatActivity {
 
     /**
      * If the deck is empty then a loading icon will show,
-     *      * and the deck will be filled with a deck from a call to firebase
+     * and the deck will be filled with a deck from a call to firebase
      */
     private void initDeck() {
         if(deckToShuffle.isEmpty())
@@ -183,7 +183,8 @@ public class TheGame extends AppCompatActivity {
     }
 
     /**
-     * Sets all the correct info the for current round.
+     * Sets all the correct info for the current round.
+     * This info is related to the current player
      */
     private void setCurrentRoundInfo() {
         Card startingCard = deck.remove();
@@ -232,7 +233,7 @@ public class TheGame extends AppCompatActivity {
     /**
      * Removes all views from the inventory layout
      * and then displays each item in the players inventory.
-     * If the inventory is empty, then sets it invisible, else it sets it visible.
+     * If the inventory is empty, then sets it to be invisible, else sets it to be visible.
      */
     private void setPlayerInventory() {
         LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -263,7 +264,7 @@ public class TheGame extends AppCompatActivity {
 
     /**
      * Removes all views from the status layout and then adds every status for the specific player.
-     * If the Status layout is empty, then sets it invisible, else it sets it visible.
+     * If the Status layout is empty, then sets it to be invisible, else sets it to be visible.
      */
     private void setPlayerStatus() {
         LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -293,8 +294,14 @@ public class TheGame extends AppCompatActivity {
     }
 
     /**
-     * Randomizes a deck and adds it to a card list.
-     * The temporary shuffle list is then cleared.
+     * Shuffles the deck by taken a card from a random position with using the current index as a limiter
+     * Then it takes the card from the current index in the deck
+     * This card then changes position with the card from the random position.
+     * Then when it has to do it all over again. The random position range will be lowered
+     * This means that the deck is actually being shuffled instead of just changing positions randomly
+     *
+     * After all this the cards then gets added to the main deck
+     * The temporary shuffled card list is then cleared.
      */
     private void shuffleDeck() {
         Random random = new Random();
@@ -316,15 +323,15 @@ public class TheGame extends AppCompatActivity {
 
     /**
      * Adds the card to the current players inventory
-     * @param cardToAdd
+     * @param cardToAdd The card that is getting added
      */
     public void addToInventory(Card cardToAdd){
         player.addToInventory(cardToAdd);
     }
 
     /**
-     * Adds the current status to the current player
-     * @param cardToAdd
+     * Adds the current status-card to the current player
+     * @param cardToAdd The card that is getting added
      */
     public void addToStatuses(Card cardToAdd) {
         for (Card card : player.getStatuses()) {
@@ -336,9 +343,9 @@ public class TheGame extends AppCompatActivity {
     }
 
     /**
-     * Does the function card' function to the game.
+     * Does the function card's function to the game.
      * Either skip the turn, double the drink value, or remove the current status.
-     * @param functionType
+     * @param functionType The type of function the card is
      */
     private void doCardFunction(FunctionType functionType) {
         switch(functionType) {
@@ -393,8 +400,8 @@ public class TheGame extends AppCompatActivity {
 
     /**
      * Multiplies the value on drinking cards.
-     * @param text
-     * @param multiplyAmount
+     * @param text The text from the card where the value has to be multiplied
+     * @param multiplyAmount the amount the value should be multiplied with
      * @return
      */
     private String multiplyDrinkValue(String text, int multiplyAmount) {
@@ -412,9 +419,11 @@ public class TheGame extends AppCompatActivity {
     }
 
     /**
-     * Shows the inventory and gives you the ability to use the cards.
-     * @param view
-     * @param card
+     * Shows a pop up box for the pressed inventory card
+     * It shows the cards information and asks if you want to use it
+     * Once used it deletes the card from the inventory and also the view on the screen
+     * @param view The view getting deleted from the inventory if the user wants to use the card
+     * @param card The card getting deleted from the inventory if the user wants to use the card
      */
     private void showInventoryBox(View view, Card card) {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -442,9 +451,12 @@ public class TheGame extends AppCompatActivity {
     }
 
     /**
-     * If status card is clicked in the inventory, then shows a popup explaining what it does.
-     * @param button
-     * @param card
+     * Makes a pop up that shows the selected status-cards information
+     * Then asks the user if they want to delete this status card
+     * If yes, then it deletes the view from the screen
+     * and the card from the players status-inventory
+     * @param button The button that represents the status card
+     * @param card The actual status card
      */
     private void showStatusRemovePopUp(Button button, Card card) {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {

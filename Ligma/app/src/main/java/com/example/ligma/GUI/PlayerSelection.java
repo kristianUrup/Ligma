@@ -99,9 +99,9 @@ public class PlayerSelection extends Activity {
 
     /**
      * Asks permission to use camera, and then relates the picture to the player taking the picture.
-     * @param requestCode
-     * @param resultCode
-     * @param data
+     * @param requestCode The requested code used
+     * @param resultCode The result code returned from the camera
+     * @param data The data from the camera as an intent
      */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP) {
@@ -117,7 +117,7 @@ public class PlayerSelection extends Activity {
 
     /**
      *Checks for duplicate names.
-     * @return
+     * @return true or false based if it found a multiple name
      */
     private boolean checkForDuplicate()
     {

@@ -26,8 +26,8 @@ public class CardDAO {
      * Gets data from database as an async call.
      * The firetore callback parameter makes sure that the call is completed before anything that needs it can be called.
      * After getting the data, it adds it to the local variable deck list and returns the list.
-     * @param callback
-     * @return
+     * @param callback The firestore callback
+     * @return an ArrayList containing cards
      */
     public ArrayList<Card> readCards(FirestoreCallback callback){
         ArrayList<Card> deckToShuffle = new ArrayList<>();

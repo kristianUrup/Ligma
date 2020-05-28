@@ -13,7 +13,7 @@ public class StatusHandling {
 
     /**
      * initializes context.
-     * @param context
+     * @param context the current context
      */
     public StatusHandling(Context context){
         ctx = context;
@@ -21,7 +21,7 @@ public class StatusHandling {
 
     /**
      * When clicking on a card an alertbox pops up to explain the card to you.
-     * @param card
+     * @param card the card to show pop from
      */
     public void showStatusPopUp(Card card) {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -39,8 +39,8 @@ public class StatusHandling {
 
     /**
      * Sets the status text to the cards status.
-     * @param card
-     * @return
+     * @param card The card the status text is from
+     * @return the string containing the status text
      */
     public String popUpText(Card card){
         String statusText = "\nCard: " + card.getText()

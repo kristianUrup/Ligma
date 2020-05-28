@@ -27,9 +27,9 @@ public class CustomAdapter extends ArrayAdapter<Card> {
 
     /**
      * initializes mPlayers, context and resource.
-     * @param context
-     * @param resource
-     * @param players
+     * @param context The context
+     * @param resource Resources
+     * @param players The list of players
      */
     public CustomAdapter(@NonNull Context context, int resource, ArrayList<Player> players) {
         super(context, resource);
@@ -45,7 +45,7 @@ public class CustomAdapter extends ArrayAdapter<Card> {
 
     /**
      * gets the layoutInflater from context.
-     * @return
+     * @return The layoutInflater from context
      */
     LayoutInflater getLayoutInflater(){
         return (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -54,10 +54,10 @@ public class CustomAdapter extends ArrayAdapter<Card> {
     /**
      * If the view does not exist, then sets the layoutInflater to null.
      * Sets of the listview with players, images and a button to delete a player.
-     * @param position
-     * @param view
-     * @param parent
-     * @return
+     * @param position Position of the view
+     * @param view the current view
+     * @param parent The viewgroup for all the child views
+     * @return the current view at the position
      */
     @Override
     public View getView(int position, View view, ViewGroup parent){
@@ -98,8 +98,8 @@ public class CustomAdapter extends ArrayAdapter<Card> {
 
     /**
      * Decodes a string to base64 and returns bitmap
-     * @param input
-     * @return
+     * @param input the string to decode
+     * @return bitmap from decoded string
      */
     public static Bitmap decodeBase64(String input)
     {
