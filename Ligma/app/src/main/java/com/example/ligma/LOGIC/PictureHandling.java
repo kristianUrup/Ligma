@@ -23,10 +23,18 @@ public class PictureHandling {
     private final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP = 101;
     static int PERMISSION_REQUEST_CODE = 1;
 
+    /**
+     * initializes context.
+     * @param context
+     */
     public PictureHandling(Context context){
         ctx = context;
     }
 
+    /**
+     * Takes a picture else returns an error code in log.
+     * @param activity
+     */
     public void takePicture(Activity activity) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -37,6 +45,10 @@ public class PictureHandling {
             Log.d(TAG, "camera app could NOT be started");
     }
 
+    /**
+     * Checks for camera permissions else asks for it.
+     * @param activity
+     */
     public void checkPermission(Activity activity) {
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {
             return;

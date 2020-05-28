@@ -24,19 +24,40 @@ import java.util.ArrayList;
 public class CustomAdapter extends ArrayAdapter<Card> {
 
     ArrayList<Player> mPlayers;
+
+    /**
+     * initializes mPlayers, context and resource.
+     * @param context
+     * @param resource
+     * @param players
+     */
     public CustomAdapter(@NonNull Context context, int resource, ArrayList<Player> players) {
         super(context, resource);
         this.mPlayers = players;
     }
     @Override
+    /**
+     * Gets the mPlayers count.
+     */
     public int getCount() {
         return mPlayers.size();
     }
 
+    /**
+     * gets the layoutInflater from context.
+     * @return
+     */
     LayoutInflater getLayoutInflater(){
         return (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    /**
+     * If the view does not exist, then sets the layoutInflater to null.
+     * @param position
+     * @param view
+     * @param parent
+     * @return
+     */
     @Override
     public View getView(int position, View view, ViewGroup parent){
         if(view == null){
@@ -74,6 +95,11 @@ public class CustomAdapter extends ArrayAdapter<Card> {
         return view;
     }
 
+    /**
+     * Decodes a string to base64 and returns bitmap
+     * @param input
+     * @return
+     */
     public static Bitmap decodeBase64(String input)
     {
         byte[] decodedBytes = Base64.decode(input, Base64.DEFAULT);

@@ -8,37 +8,77 @@ import android.view.View;
 public class OnSwipeTouchListener implements View.OnTouchListener {
     private GestureDetector gestureDetector;
 
+    /**
+     * initializes gestureDetector.
+     * @param context
+     */
     public OnSwipeTouchListener(Context context) {
         gestureDetector = new GestureDetector(context, new GestureListener());
     }
+
+    /**
+     * Returns a boolean based on a MotionEvent.
+     * @param v
+     * @param event
+     * @return
+     */
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         return gestureDetector.onTouchEvent(event);
     }
 
+    /**
+     * Listening for an action from onDown, onSingleTapUp, onDoubleTap, onlongPress and onFling
+     */
     private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
         private static final int SWIPE_THRESHOLD = 100;
         private static final int SWIPE_VELOCITY_THRESHOLD = 100;
 
+        /**
+         * @param e
+         * @return
+         */
         @Override
         public boolean onDown(MotionEvent e) {
             return true;
         }
+
+        /**
+         * @param e
+         * @return
+         */
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             onClick();
             return super.onSingleTapUp(e);
         }
+
+        /**
+         * @param e
+         * @return
+         */
         @Override
         public boolean onDoubleTap(MotionEvent e) {
             onDoubleClick();
             return super.onDoubleTap(e);
         }
+
+        /**
+         * @param e
+         */
         @Override
         public void onLongPress(MotionEvent e) {
             onLongClick();
             super.onLongPress(e);
         }
+
+        /**
+         * @param e1
+         * @param e2
+         * @param velocityX
+         * @param velocityY
+         * @return
+         */
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             try {
