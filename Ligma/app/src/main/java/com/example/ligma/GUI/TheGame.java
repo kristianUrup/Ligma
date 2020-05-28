@@ -99,6 +99,9 @@ public class TheGame extends AppCompatActivity {
         startGame();
     }
 
+    /*
+     * Initializes the views
+     */
     private void initViews() {
         cardSym = findViewById(R.id.card_symbol);
         cardDesc = findViewById(R.id.card_description);
@@ -115,6 +118,10 @@ public class TheGame extends AppCompatActivity {
         loadingIcon = findViewById(R.id.loadingIcon);
     }
 
+    /*
+     * If the deck is empty then a loading icon will show,
+     * and the deck will be filled with a deck from a call to firebase
+     */
     private void initDeck() {
         if(deckToShuffle.isEmpty())
         {
@@ -138,15 +145,28 @@ public class TheGame extends AppCompatActivity {
         statusesView.setVisibility(View.INVISIBLE);
     }
 
+    /*
+     * When the back button is pressed a message will show
+     * that it is not an option to go back
+     */
     @Override
     public void onBackPressed() {
         Toast.makeText(this, "Going back is not an option", Toast.LENGTH_SHORT).show();
     }
 
+    /*
+     * Starts the game by initializing the deck
+     */
     private void startGame() {
         initDeck();
     }
 
+    /*
+     * This method handles how the game proceeds to the next turn.
+     * It checks if the current player is the last in the game and then goes to the first player again.
+     * If the current player is not the last, then it just goes to the next player.
+     * It also checks if the deck is empty, if it is, then it shuffles the deck
+     */
     private void nextTurn() {
         if (currentPlayerIndex == players.size() - 1) {
             currentPlayerIndex = 0;
@@ -160,6 +180,9 @@ public class TheGame extends AppCompatActivity {
         setCurrentRoundInfo();
     }
 
+    /*
+     * Sets all the correct info the for current round.
+     */
     private void setCurrentRoundInfo() {
         Card startingCard = deck.remove();
         deckToShuffle.add(startingCard);
@@ -191,6 +214,9 @@ public class TheGame extends AppCompatActivity {
         showPlayerInfo();
     }
 
+    /*
+     * Sets the player inventory, player status, player name and player image.
+     */
     private void showPlayerInfo() {
         playerName.setText(player.getName());
 
@@ -201,6 +227,11 @@ public class TheGame extends AppCompatActivity {
         imgPlayer.setImageBitmap(bitmap);
     }
 
+    /*
+     * Removes all views from the inventory layout
+     * and then displays each item in the players inventory.
+     * If the inventory is empty, then sets it invisible, else it sets it visible.
+     */
     private void setPlayerInventory() {
         LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         inventory.removeAllViews();
@@ -228,6 +259,10 @@ public class TheGame extends AppCompatActivity {
         }
     }
 
+    /*
+     * Removes all views from the status layout and then adds every status for the specific player.
+     * If the Status layout is empty, then sets it invisible, else it sets it visible.
+     */
     private void setPlayerStatus() {
         LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         statutes.removeAllViews();
@@ -255,6 +290,10 @@ public class TheGame extends AppCompatActivity {
         }
     }
 
+    /*
+     * Randomizes a deck and adds it to a card list.
+     * The temporary shuffle list is then cleared.
+     */
     private void shuffleDeck() {
         Random random = new Random();
 
@@ -273,10 +312,16 @@ public class TheGame extends AppCompatActivity {
         deckToShuffle.clear();
     }
 
+    /*
+     * Adds the card to the current players inventory
+     */
     public void addToInventory(Card cardToAdd){
         player.addToInventory(cardToAdd);
     }
 
+    /*
+     * Adds the current status to the current player
+     */
     public void addToStatuses(Card cardToAdd) {
         for (Card card : player.getStatuses()) {
             if (card.getText() == cardToAdd.getText()) {
@@ -286,6 +331,10 @@ public class TheGame extends AppCompatActivity {
         player.addToStatuses(cardToAdd);
     }
 
+    /*
+     * Does the function card' function to the game.
+     * Either skip the turn, double the drink value, or remove the current status.
+     */
     private void doCardFunction(FunctionType functionType) {
         switch(functionType) {
             case SKIP:
@@ -309,6 +358,10 @@ public class TheGame extends AppCompatActivity {
         }
     }
 
+
+    /*
+     * Removes one status from the player using it.
+     */
     private void removeAStatusFromPLayer() {
         for(int i = 0; i < statutes.getChildCount(); i++) {
             Button button = (Button) statutes.getChildAt(i);
@@ -323,6 +376,9 @@ public class TheGame extends AppCompatActivity {
         }
     }
 
+    /*
+     * Removes alle statutes from the player using it.
+     */
     private void removeAllStatusesFromPlayer() {
         for (Card card : player.getStatuses()) {
             player.removeFromStatuses(card);
@@ -330,6 +386,9 @@ public class TheGame extends AppCompatActivity {
         statutes.removeAllViews();
     }
 
+    /*
+     * Multiplies the value on drinking cards.
+     */
     private String multiplyDrinkValue(String text, int multiplyAmount) {
         String newText = "";
         for (int i = 0; i < text.length(); i++) {
@@ -344,6 +403,9 @@ public class TheGame extends AppCompatActivity {
         return newText;
     }
 
+    /*
+     * Shows the inventory and gives you the ability to use the cards.
+     */
     private void showInventoryBox(View view, Card card) {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
@@ -369,6 +431,9 @@ public class TheGame extends AppCompatActivity {
                 .setNegativeButton("No...", dialogClickListener).show();
     }
 
+    /*
+     * If status card is clicked in the inventory, then shows a popup explaining what it does.
+     */
     private void showStatusRemovePopUp(Button button, Card card) {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
