@@ -53,6 +53,7 @@ public class CustomAdapter extends ArrayAdapter<Card> {
 
     /**
      * If the view does not exist, then sets the layoutInflater to null.
+     * Sets of the listview with players, images and a button to delete a player.
      * @param position
      * @param view
      * @param parent
