@@ -22,6 +22,13 @@ public class CardDAO {
         db = FirebaseFirestore.getInstance();
     }
 
+    /**
+     * Gets data from database as an async call.
+     * The firetore callback parameter makes sure that the call is completed before anything that needs it can be called.
+     * After getting the data, it adds it to the local variable deck list and returns the list.
+     * @param callback
+     * @return
+     */
     public ArrayList<Card> readCards(FirestoreCallback callback){
         ArrayList<Card> deckToShuffle = new ArrayList<>();
 

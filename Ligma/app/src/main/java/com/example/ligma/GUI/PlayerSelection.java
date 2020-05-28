@@ -49,7 +49,10 @@ public class PlayerSelection extends Activity {
     static int PERMISSION_REQUEST_CODE = 1;
     PictureHandling pictureHandling;
 
-
+    /**
+     * OnCreate instantiates all of our variables and sets up the activity to be used.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +78,11 @@ public class PlayerSelection extends Activity {
         list = new ArrayList<>();
 
 
-
+        /**
+         * TextChangedListener notices any changes made in the EditText.
+         * During change of the text and after change of the text, it calls the method checkAndAddPlayer(),
+         * which checks if the name in the editText can be used as a player name.
+         */
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -90,6 +97,12 @@ public class PlayerSelection extends Activity {
         });
     }
 
+    /**
+     * Asks permission to use camera, and then relates the picture to the player taking the picture.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP) {
             if (resultCode == RESULT_OK) {
@@ -99,10 +112,13 @@ public class PlayerSelection extends Activity {
                 imgCamera.setImageBitmap(imageBitmap);
                 imgCameraString = Base64Coding.imageToString(imageBitmap);
             }
-
         }
     }
 
+    /**
+     *Checks for duplicate names.
+     * @return
+     */
     private boolean checkForDuplicate()
     {
         for (Player p: players)
@@ -115,6 +131,9 @@ public class PlayerSelection extends Activity {
         return false;
     }
 
+    /**
+     * Checks if player name is valid. If invalid, will not be able to see the add player button.
+     */
     private void checkAndAddPlayer(){
         if(!TextUtils.isEmpty(editText.getText().toString())) {
             if(checkForDuplicate())
@@ -145,6 +164,9 @@ public class PlayerSelection extends Activity {
         }
     }
 
+    /**
+     * Adds player name and picture to a listView that displays all the players in the game.
+     */
     private void addToListView(){
         AddNewPlayer.setVisibility(View.VISIBLE);
         String name = editText.getText().toString();
@@ -160,6 +182,10 @@ public class PlayerSelection extends Activity {
         customAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Makes sure if player list has 2 players or more, before starting the game activity.
+     * @param view
+     */
     public void onClickStart(View view){
         if(players.isEmpty()){
             String startGameWithoutPlayers = "You cannot start a game with less than 2 players";
